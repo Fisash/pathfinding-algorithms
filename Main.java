@@ -5,20 +5,22 @@ class Main
 {
     public static void main(String[] args)
     {
-        Map map = new Map("./test_map.tex");
-        System.out.print(PathConsoleVisualizer.printMap(map));
+        Map map = new Map("./test_map2.tex");
+        List<Point> path = BFS.search(map, new Point(0, 12), new Point(7, 10));
 
-        List<Point> path = BFS.search(map, new Point(0, 5), new Point(2, 0));
         if (path == null)
         {
-            System.err.println("no fucking way!");
+            System.err.println("Path is not found!");
             return;
         }
 
         for (int i = 0; i < path.size(); i++)
             System.out.print(path.get(i).toString());
         System.out.print("\n");
+        PathConsoleVisualizer.clear();
         System.out.println("Path finded by BFS:");
-        System.out.print(PathConsoleVisualizer.printPath(map, path));
+
+        String result = PathConsoleVisualizer.printPath(map, path);
+        System.out.print(result);
     }
 }

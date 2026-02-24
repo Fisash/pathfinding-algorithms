@@ -61,7 +61,7 @@ class BFS
         {
             Point cell = queue.poll();
             if (cell.equals(finish))
-                return buildPath(start, finish); //todo
+                return buildPath(start, finish); 
 
             for (int i = 0; i < directions.length; i++)
             {
@@ -80,6 +80,7 @@ class BFS
                 distances[new_y][new_x] = distances[cell.y][cell.x] + 1;
                 ancestors[new_y][new_x] = cell;
                 queue.add(newPoint);
+                PathConsoleVisualizer.stateHandle(map, distances, buildPath(start, newPoint));
             }  
         }
         return null; //path is not found
