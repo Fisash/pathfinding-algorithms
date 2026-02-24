@@ -5,7 +5,7 @@ class BFS
     private static int[][] distances;
     private static Queue<Point> queue;
     private static final int[][] directions = 
-    {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};     
+    {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};     
     private static Point[][] ancestors;
 
     private static boolean isNoWayAPriori(Map map, Point start, Point finish)
@@ -80,7 +80,7 @@ class BFS
                 distances[new_y][new_x] = distances[cell.y][cell.x] + 1;
                 ancestors[new_y][new_x] = cell;
                 queue.add(newPoint);
-                PathConsoleVisualizer.stateHandle(map, distances, buildPath(start, newPoint));
+                PFConsoleRenderer.stateHandle(map, distances, buildPath(start, newPoint));
             }  
         }
         return null; //path is not found

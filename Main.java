@@ -17,10 +17,10 @@ class Main
         for (int i = 0; i < path.size(); i++)
             System.out.print(path.get(i).toString());
         System.out.print("\n");
-        PathConsoleVisualizer.clear();
-        System.out.println("Path finded by BFS:");
+        PFConsoleRenderer.clear();
+        System.out.println("Path found by BFS:");
 
-        String result = PathConsoleVisualizer.printPath(map, path);
+        String result = PFConsoleRenderer.printPath(map, path);
         System.out.print(result);
     }
 }
