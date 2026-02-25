@@ -6,7 +6,13 @@ class Main
     public static void main(String[] args)
     {
         Map map = new Map("./test_map2.tex");
-        List<Point> path = BFS.search(map, new Point(0, 12), new Point(7, 10));
+
+        ConsoleRenderFrameOptions baseFrame = 
+        new ConsoleRenderFrameOptions('-', '|', 'X', 1);
+
+        PFConsoleRenderer renderer = new PFConsoleRenderer(100, baseFrame);
+
+        List<Point> path = BFS.search(map, new Point(0, 12), new Point(7, 10), renderer);
 
         if (path == null)
         {
@@ -14,13 +20,7 @@ class Main
             return;
         }
 
-        for (int i = 0; i < path.size(); i++)
-            System.out.print(path.get(i).toString());
-        System.out.print("\n");
-        PFConsoleRenderer.clear();
         System.out.println("Path found by BFS:");
-
-        String result = PFConsoleRenderer.printPath(map, path);
-        System.out.print(result);
+        renderer.draw(map, path);
     }
 }

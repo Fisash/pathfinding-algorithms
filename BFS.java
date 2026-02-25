@@ -47,7 +47,8 @@ class BFS
         return result;
     } 
 
-    public static List<Point> search(Map map, Point start, Point finish)
+    public static List<Point> search
+    (Map map, Point start, Point finish, PFConsoleRenderer intermediateResRenderer)
     {
         if(isNoWayAPriori(map, start, finish))
             return null; 
@@ -80,7 +81,8 @@ class BFS
                 distances[new_y][new_x] = distances[cell.y][cell.x] + 1;
                 ancestors[new_y][new_x] = cell;
                 queue.add(newPoint);
-                PFConsoleRenderer.stateHandle(map, distances, buildPath(start, newPoint));
+                if(intermediateResRenderer != null)
+                    intermediateResRenderer.stateHandle(map, distances, buildPath(start, newPoint));
             }  
         }
         return null; //path is not found
