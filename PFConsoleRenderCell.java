@@ -11,7 +11,7 @@ class PFConsoleRenderCell
 
     private static final String WALL = "#";
     private static final String PATHPOINT = "o";
-    private static final String UNVISITED = "_";
+    private static final String UNVISITED = " ";
     private static final String WIDTH_FILLER = " ";
 
     int value;

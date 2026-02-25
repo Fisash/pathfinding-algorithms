@@ -6,10 +6,14 @@ class PFConsoleRenderer
     private final int msDisplayStateDelay; 
     private PFConsoleRenderCell[][] render;
 
-    PFConsoleRenderer(int msDisplayStateDelay, ConsoleRenderFrameOptions frame)
+    private boolean isHideDistancesInResult = true;
+
+    PFConsoleRenderer(int msDisplayStateDelay, ConsoleRenderFrameOptions frame, Map initMap)
     {
         this.msDisplayStateDelay = msDisplayStateDelay; 
         this.frame = frame;
+        initRender(initMap);
+        renderMap(initMap);
     }
 
     public static void clear()
@@ -18,7 +22,7 @@ class PFConsoleRenderer
         System.out.flush();
     }
 
-    public static int getCellWidth(Map map)
+    public static int evaluateCellWidth(Map map)
     {
         int maxPossibleDist = map.getWidth() * map.getHeight();
         return String.valueOf(maxPossibleDist).length();
@@ -29,10 +33,8 @@ class PFConsoleRenderer
     {
         clear();
 
-        int cellWidth = getCellWidth(map);
+        int cellWidth = evaluateCellWidth(map);
 
-        initRender(map);
-        renderMap(map);
         renderDistances(distances);
         renderPath(map, statePath);
         System.out.print(renderToString(cellWidth));
@@ -49,11 +51,11 @@ class PFConsoleRenderer
 
     public void draw(Map map, List<Point> path)
     {
-        initRender(map);
-        renderMap(map);
+        if(isHideDistancesInResult)
+            clearDistances();
         renderPath(map, path);
-        System.out.print("\n"); 
-        System.out.print(renderToString(1));
+        int cellWidth = isHideDistancesInResult ? 1 : evaluateCellWidth(map);
+        System.out.print(renderToString(cellWidth));
     } 
 
     private String renderToString (int cellWidth)
@@ -61,11 +63,7 @@ class PFConsoleRenderer
         StringBuilder result = new StringBuilder();
         int i, j;
         int lineLength = render[0].length;
-
-        for(i = 0; i < lineLength*cellWidth*3/2; i++)
-            result.append(frame.h_view);
-        result.append("\n");
-
+        frame.addTopLine(result, lineLength, cellWidth);
         for(i = 0; i < render.length; i++)
         {
             result.append(frame.v_view);
@@ -78,16 +76,19 @@ class PFConsoleRenderer
             result.append("\n");
         }
 
-        for(i = 0; i < 2*lineLength*cellWidth; i++)
-            result.append(frame.h_view);
-        result.append("\n");
-
+        frame.addBottomLine(result, lineLength, cellWidth);
         return result.toString();
     }
 
     private void renderPath
         (Map map, List<Point> path)
     {
+        for(int i = 0; i < render.length; i++)
+        {
+            for(int j = 0; j < render[i].length; j++)
+                render[i][j].isPath = false;
+        }
+
         for (Point p : path)
         {
             if(!map.isInBounds(p))
@@ -96,12 +97,20 @@ class PFConsoleRenderer
         } 
     }
     
+    private void clearDistances ()
+    {
+        for(int i = 0; i < render.length; i++)
+        {
+            for(int j = 0; j < render[i].length; j++)
+                render[i][j].value = -1;
+        }
+    }
+    
     private void renderDistances (int[][] distances)
     {
         for(int i = 0; i < render.length; i++)
         {
-            PFConsoleRenderCell[] renderLine = render[i];
-            for(int j = 0; j < renderLine.length; j++)
+            for(int j = 0; j < render[i].length; j++)
                 render[i][j].value = distances[i][j];
         }
     }
@@ -110,8 +119,7 @@ class PFConsoleRenderer
     {
         for(int i = 0; i < render.length; i++)
         {
-            PFConsoleRenderCell[] renderLine = render[i];
-            for(int j = 0; j < renderLine.length; j++)
+            for(int j = 0; j < render[i].length; j++)
                 render[i][j] = new PFConsoleRenderCell(map.getCell(j, i));
         }
     }
