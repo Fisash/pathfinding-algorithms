@@ -1,3 +1,4 @@
+package com.example;
 class ConsoleRenderFrameOptions
 {
     char h_view;

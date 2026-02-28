@@ -1,1 +1,2 @@
-javac *.java
+mvn clean package
+cp target/*.jar app/

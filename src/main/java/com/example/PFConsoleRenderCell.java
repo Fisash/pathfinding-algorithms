@@ -1,3 +1,4 @@
+package com.example;
 class PFConsoleRenderCell
 {
     private static final String RED = "\u001B[31m";
@@ -9,7 +10,7 @@ class PFConsoleRenderCell
         return COLOR+input+RESET;
     }
 
-    private static final String WALL = "#";
+    private static final String WALL = "■";
     private static final String PATHPOINT = "o";
     private static final String UNVISITED = " ";
     private static final String WIDTH_FILLER = " ";
