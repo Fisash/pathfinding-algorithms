@@ -31,7 +31,7 @@ class AStar extends PathFinder {
         while (!openSet.isEmpty()) {
             Node node = openSet.poll();
             Point cell = node.point;
-            if (node.g > distances[cell.y][cell.x]) continue; // пропускаем устаревшие записи
+            if (node.g > distances[cell.y][cell.x]) continue; 
             if (cell.equals(finish)) 
                 return buildPath(start, finish);
 
