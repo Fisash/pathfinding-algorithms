@@ -4,41 +4,34 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Map
-{
+class Map{
     public final static int WALL = 1;
     public final static int FREE = 0;
 
     private int[][] cells;
    
-    public int getWidth()
-    {
+    public int getWidth(){
         return cells[0].length;
     }
 
-    public int getHeight()
-    {
+    public int getHeight(){
         return cells.length;
     }
 
-    public int getCell (int x, int y)
-    {
+    public int getCell (int x, int y){
         return cells[y][x];
     }
 
-    public int getCell (Point point)
-    {
+    public int getCell (Point point){
         return cells[point.y][point.x];
     }
     
-    public boolean isInBounds(Point point)
-    {
+    public boolean isInBounds(Point point){
         return point.x >= 0 && point.y >= 0 &&
                point.x < getWidth() && point.y < getHeight(); 
     }
 
-    public String getOutput()
-    {
+    public String getOutput(){
         String result = "";
         for (int i = 0; i < cells.length; i++)
         {
@@ -53,21 +46,17 @@ class Map
         return result;
     } 
 
-    public Map(int width, int height)
-    {
+    public Map(int width, int height){
         cells = new int[height][width];
     } 
     
-    public Map(int[][] cells)
-    {
+    public Map(int[][] cells){
         this.cells = cells;
     }
 
-    public Map(String filepath) 
-    {
+    public Map(String filepath) {
         File file = new File(filepath);
-        try (Scanner scanner = new Scanner(file))
-        {
+        try (Scanner scanner = new Scanner(file)){
             ArrayList<String> lines = new ArrayList<>();
         
             while (scanner.hasNextLine())
@@ -78,15 +67,13 @@ class Map
             int width = firstRow.length;
 
             cells = new int [height][width];
-            for(int i = 0; i < height; i++)
-            {
+            for(int i = 0; i < height; i++){
                 String[] stringCells = lines.get(i).trim().split("\s+");
                 for(int j = 0; j < width; j++)
                     cells[i][j] = Integer.parseInt(stringCells[j]);
             }
         }
-        catch (FileNotFoundException e)
-        {
+        catch (FileNotFoundException e){
             System.err.println("file for map not found");
         }
     }

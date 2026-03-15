@@ -1,91 +1,36 @@
 package com.example;
 import java.util.*;
 
-class BFS
-{
-    private static int[][] distances;
-    private static Queue<Point> queue;
-    private static final int[][] directions = 
-    {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};     
-    private static Point[][] ancestors;
-
-    private static boolean isNoWayAPriori(Map map, Point start, Point finish)
-    {
-        boolean isStartWall = map.getCell(start) == Map.WALL;
-        boolean isFinishWall = map.getCell(finish) == Map.WALL;
-
-        return isStartWall || isFinishWall;
-    }
-    
-    private static void init(Map map)
-    {
-        int width = map.getWidth();
-        int height = map.getHeight();
-
-        //distances from start to every cell. -1 if unvisited
-        distances = new int[height][width];
+class BFS extends PathFinder {
+    @Override
+    public List<Point> search(Map map, Point start, Point finish, PFConsoleRenderer renderer) {
+        if (isNoWayAPriori(map, start, finish)) return null;
+        initArrays(map);
         for (int i = 0; i < height; i++)
             Arrays.fill(distances[i], -1);
-        
-        //ancestors[x][y] - coord of cell from we came to (x, y) cell 
-        ancestors = new Point[height][width];
-
-        queue = new LinkedList<>();        
-    }
-
-    private static List<Point> buildPath (Point start, Point finish)
-    {
-        List<Point> result = new ArrayList<>();
-        Point current = finish;
-        while (current != null)
-        {
-            result.add(current);
-            if(current.equals(start))
-                break;
-            current = ancestors[current.y][current.x];
-        }    
-        Collections.reverse(result);
-        return result;
-    } 
-
-    public static List<Point> search
-    (Map map, Point start, Point finish, PFConsoleRenderer intermediateResRenderer)
-    {
-        if(isNoWayAPriori(map, start, finish))
-            return null; 
-        
-        init(map);
-
+        Queue<Point> queue = new LinkedList<>();
         queue.add(start);
-        distances[start.y][start.x] = 0; //visited start cell
+        distances[start.y][start.x] = 0;
         
-        while (!queue.isEmpty())
-        {
+        while (!queue.isEmpty()) {
             Point cell = queue.poll();
             if (cell.equals(finish))
-                return buildPath(start, finish); 
-
-            for (int i = 0; i < directions.length; i++)
-            {
-                int new_x = cell.x + directions[i][0];
-                int new_y = cell.y + directions[i][1];
-               
-                Point newPoint = new Point(new_x, new_y); 
-
-                if (!map.isInBounds(newPoint))
-                    continue;
-                if (map.getCell(newPoint) != Map.FREE)
-                    continue;
-                if (distances[new_y][new_x] != -1)
-                    continue;
-
-                distances[new_y][new_x] = distances[cell.y][cell.x] + 1;
-                ancestors[new_y][new_x] = cell;
-                queue.add(newPoint);
-                if(intermediateResRenderer != null)
-                    intermediateResRenderer.stateHandle(map, distances, buildPath(start, newPoint));
-            }  
+                return buildPath(start, finish);
+            for (int[] dir : DIRECTIONS) {
+                int nx = cell.x + dir[0];
+                int ny = cell.y + dir[1];
+                Point neighbor = new Point(nx, ny);
+                if (!map.isInBounds(neighbor)) continue;
+                if (map.getCell(neighbor) != Map.FREE) continue;
+                if (distances[ny][nx] != -1) continue;
+                
+                distances[ny][nx] = distances[cell.y][cell.x] + 1;
+                ancestors[ny][nx] = cell;
+                queue.add(neighbor);
+                if (renderer != null)
+                    renderer.stateHandle(map, distances, buildPath(start, neighbor));
+            }
         }
-        return null; //path is not found
-    }    
+        return null;
+    }
 }

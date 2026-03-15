@@ -1,12 +1,10 @@
 package com.example;
-class PFConsoleRenderCell
-{
+class PFConsoleRenderCell{
     private static final String RED = "\u001B[31m";
     private static final String BLUE = "\u001B[34m";
     private static final String RESET = "\u001B[0m"; 
 
-    private static String wrap(String input, String COLOR)
-    {
+    private static String wrap(String input, String COLOR){
         return COLOR+input+RESET;
     }
 
@@ -19,22 +17,19 @@ class PFConsoleRenderCell
     boolean isWall;
     boolean isPath;
 
-    PFConsoleRenderCell(int value, boolean isWall, boolean isPath)
-    {
+    PFConsoleRenderCell(int value, boolean isWall, boolean isPath){
         this.value = value;
         this.isWall = isWall;
         this.isPath = isPath;
     }
 
-    PFConsoleRenderCell (int mapCell)
-    {
+    PFConsoleRenderCell (int mapCell){
         value = -1;
         isWall = mapCell == Map.WALL;
         isPath = false;
     }
 
-    private static String fillToWidth(String content, int width)
-    {
+    private static String fillToWidth(String content, int width){
         int length = content.length();
         if (length >= width) 
             return content;
@@ -47,13 +42,12 @@ class PFConsoleRenderCell
         return result.toString();
     }
 
-    public String stringView(int width)
-    {
+    public String stringView(int width){
         if(isWall)
             return wrap(fillToWidth(WALL, width), BLUE);
         if(isPath)
             return wrap(fillToWidth(PATHPOINT, width), RED);
-        if(value == -1)
+        if(value == -1 || value == Integer.MAX_VALUE)
             return fillToWidth(UNVISITED, width);
         return fillToWidth(String.valueOf(value), width); 
     }

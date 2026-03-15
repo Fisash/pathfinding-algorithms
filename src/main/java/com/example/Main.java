@@ -5,54 +5,75 @@ import java.util.Properties;
 import java.io.FileReader;
 import java.io.IOException;
 
-class Main
-{
-    private static String MAP_FILE_PATH;
-    private static Point start;
-    private static Point finish;
-    private static int rendererStateDelay;    
+class Main{
+    private enum Algorithm{
+        BFS, AStar
+    }
 
-    private static int loadProperties()
-    {
+    private String MAP_FILE_PATH;
 
-        try(FileReader reader = new FileReader("config.properties"))
-        {
+    private Point start;
+    private Point finish;
+
+    private int rendererStateDelay;    
+    private Algorithm algorithm;
+
+    private Map map;
+    private PathFinder pathFinder; 
+
+    private int loadProperties(){
+
+        try(FileReader reader = new FileReader("pf.conf")){
             Properties props = new Properties();
             props.load(reader);
 
-            MAP_FILE_PATH = props.getProperty("map.path");
+            MAP_FILE_PATH = props.getProperty("map_path");
 
-            int start_x = Integer.parseInt(props.getProperty("start.x"));
-            int start_y = Integer.parseInt(props.getProperty("start.y"));
-            int finish_x = Integer.parseInt(props.getProperty("finish.x"));
-            int finish_y = Integer.parseInt(props.getProperty("finish.y"));
+            String[] startString = props.getProperty("start").split(";");
+            int start_x = Integer.parseInt(startString[0].trim());
+            int start_y = Integer.parseInt(startString[1].trim());
+
+            String[] finishString = props.getProperty("finish").split(";");
+            int finish_x = Integer.parseInt(finishString[0].trim());
+            int finish_y = Integer.parseInt(finishString[1].trim());
 
             start = new Point(start_x, start_y);
             finish = new Point(finish_x, finish_y);
 
-            rendererStateDelay = Integer.parseInt(props.getProperty("renderer.delay"));
+            rendererStateDelay = Integer.parseInt(props.getProperty("renderer_delay"));
+
+            String algorithmString = props.getProperty("algorithm");
+            algorithm = Enum.valueOf(Algorithm.class, algorithmString); 
 
         }
-        catch (IOException e)
-        {
+        catch (IOException e){
             return 1;
         }
         return 0;
     }
 
-    public static void main(String[] args)
-    {
+    private void createPF(){
+        switch (algorithm){
+            case BFS:
+                pathFinder = new BFS();
+                break;
+            case AStar:
+                pathFinder = new AStar();
+                break;
+            default:
+                pathFinder = null;
+        }
+    }
 
-        if (loadProperties() == 1)
-        {
-            System.err.println("Error of read config.properties");
+    public void run(){
+        if (loadProperties() == 1){
+            System.err.println("Error of read config");
             return;
         }
 
-        Map map = new Map(MAP_FILE_PATH);
+        map = new Map(MAP_FILE_PATH);
 
-        if (map == null)
-        {
+        if (map == null){
             System.err.println("Error of create map by file");
             return;
         }
@@ -62,15 +83,25 @@ class Main
 
         PFConsoleRenderer renderer = new PFConsoleRenderer(rendererStateDelay, baseFrame, map);
 
-        List<Point> path = BFS.search(map, start, finish, renderer);
+        createPF();
 
-        if (path == null)
-        {
+        if (pathFinder == null){
+            System.err.println("Error of create PF object");
+            return;
+        }
+
+        List<Point> path = pathFinder.search(map, start, finish, renderer);
+
+        if (path == null){
             System.err.println("Path is not found!");
             return;
         }
 
         System.out.println("Path found by BFS:");
         renderer.draw(map, path);
+    }
+
+    public static void main(String[] args){
+        new Main().run();
     }
 }
