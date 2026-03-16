@@ -90,14 +90,16 @@ class Main{
             return;
         }
 
-        List<Point> path = pathFinder.search(map, start, finish, renderer);
+        PathFindingResult result = pathFinder.search(map, start, finish, renderer);
+        List<Point> path = result.path;
 
         if (path == null){
             System.err.println("Path is not found!");
             return;
         }
 
-        System.out.println("Path found by BFS:");
+        System.out.println("Path found by " + algorithm.name());
+        System.out.println("Length: " + result.length + "; Iteration count: " + result.iterationCount);
         renderer.draw(map, path);
     }
 

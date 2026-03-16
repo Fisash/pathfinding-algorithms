@@ -10,11 +10,14 @@ abstract class PathFinder {
     protected Point[][] ancestors;
     protected int width, height;
     
-    protected void initArrays(Map map) {
+    protected int iterationCount;
+    
+    protected void initBase(Map map) {
         width = map.getWidth();
         height = map.getHeight();
         distances = new int[height][width];
         ancestors = new Point[height][width];
+        iterationCount = 0;
     }
     
     protected List<Point> buildPath(Point start, Point finish) {
@@ -33,5 +36,5 @@ abstract class PathFinder {
         return map.getCell(start) == Map.WALL || map.getCell(finish) == Map.WALL;
     }
     
-    public abstract List<Point> search(Map map, Point start, Point finish, PFConsoleRenderer renderer);
+    public abstract PathFindingResult search(Map map, Point start, Point finish, PFConsoleRenderer renderer);
 }

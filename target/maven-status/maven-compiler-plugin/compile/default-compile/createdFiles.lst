@@ -8,4 +8,5 @@ com/example/Point.class
 com/example/Main.class
 com/example/Map.class
 com/example/BFS.class
+com/example/PathFindingResult.class
 com/example/PathFinder.class

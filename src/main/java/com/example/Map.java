@@ -30,6 +30,9 @@ class Map{
         return point.x >= 0 && point.y >= 0 &&
                point.x < getWidth() && point.y < getHeight(); 
     }
+    public boolean isSuitableToVisit(Point point){
+        return isInBounds(point) && getCell(point) == Map.FREE;
+    }
 
     public String getOutput(){
         String result = "";
