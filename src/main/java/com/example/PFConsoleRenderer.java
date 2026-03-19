@@ -5,12 +5,14 @@ class PFConsoleRenderer{
     private ConsoleRenderFrameOptions frame;
     private final int msDisplayStateDelay; 
     private PFConsoleRenderCell[][] render;
+    private int cellWidth;
 
     private boolean isHideDistancesInResult = true;
 
     PFConsoleRenderer(int msDisplayStateDelay, ConsoleRenderFrameOptions frame, Map initMap){
         this.msDisplayStateDelay = msDisplayStateDelay; 
         this.frame = frame;
+        cellWidth = evaluateCellWidth(initMap);
         initRender(initMap);
         renderMap(initMap);
     }
@@ -28,8 +30,6 @@ class PFConsoleRenderer{
     public void stateHandle
         (Map map, int [][] distances, List<Point> statePath){
         clear();
-
-        int cellWidth = evaluateCellWidth(map);
 
         renderDistances(distances);
         renderPath(map, statePath);
