@@ -11,4 +11,8 @@ class PathFindingResult{
         this.length = length;
         this.iterationCount = iterationCount; 
     }
+
+    public String toString() {
+        return "Length: " + length + "; Iteration count: " + iterationCount;
+    }
 }

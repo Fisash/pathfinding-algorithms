@@ -99,7 +99,7 @@ class Main{
         }
 
         System.out.println("Path found by " + algorithm.name());
-        System.out.println("Length: " + result.length + "; Iteration count: " + result.iterationCount);
+        System.out.println(result.toString());
         renderer.draw(map, path);
     }
 
