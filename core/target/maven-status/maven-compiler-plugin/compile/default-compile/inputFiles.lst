@@ -1,11 +1,9 @@
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/AStar.java
+/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Algorithm.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/BFS.java
-/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Main.java
+/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Config.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Map.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/PathFinder.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/PathFindingResult.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Point.java
 /home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/Renderer.java
-/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/console_renderer/ConsoleRenderFrameOptions.java
-/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/console_renderer/PFConsoleRenderCell.java
-/home/fisash/Study/java/pathfinding-algorithms/core/src/main/java/com/example/console_renderer/PFConsoleRenderer.java

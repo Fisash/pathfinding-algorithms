@@ -1,7 +1,7 @@
 package com.example;
 import java.util.*;
 
-class BFS extends PathFinder {
+public class BFS extends PathFinder {
 
     Queue<Point> queue;
     private void initSpecific(){
@@ -11,7 +11,7 @@ class BFS extends PathFinder {
     }
 
     @Override
-    public PathFindingResult search (Map map, Point start, Point finish, PFConsoleRenderer renderer) {
+    public PathFindingResult search (Map map, Point start, Point finish, Renderer renderer) {
         if (isNoWayAPriori(map, start, finish)) 
             return null;
         initBase(map);

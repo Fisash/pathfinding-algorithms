@@ -1,8 +1,8 @@
 package com.example;
 import java.util.*;
 
-class PathFindingResult{
-    List<Point> path;
+public class PathFindingResult{
+    public List<Point> path;
     int length;
     int iterationCount;  
     

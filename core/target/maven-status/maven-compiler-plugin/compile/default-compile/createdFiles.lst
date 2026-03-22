@@ -1,13 +1,10 @@
-com/example/PFConsoleRenderer.class
-com/example/PFConsoleRenderCell.class
+com/example/Config.class
 com/example/Renderer.class
-com/example/ConsoleRenderFrameOptions.class
+com/example/Algorithm.class
+com/example/AStar.class
 com/example/Point.class
+com/example/AStar$Node.class
 com/example/Map.class
 com/example/PathFindingResult.class
-com/example/Main$Algorithm.class
-com/example/AStar.class
-com/example/Main.class
-com/example/AStar$Node.class
 com/example/BFS.class
 com/example/PathFinder.class

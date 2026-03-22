@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Map{
+public class Map{
     public final static int WALL = 1;
     public final static int FREE = 0;
 

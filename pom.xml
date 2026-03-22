@@ -13,6 +13,7 @@
     <modules>
         <module>core</module>
         <module>graphic</module>
+        <module>console</module>
     </modules>
 
     <properties>
@@ -24,6 +25,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>path-finding-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.lwjgl</groupId>
                 <artifactId>lwjgl</artifactId>

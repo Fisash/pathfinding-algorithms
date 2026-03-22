@@ -1,7 +1,7 @@
 package com.example;
 import java.util.*;
 
-class AStar extends PathFinder {
+public class AStar extends PathFinder {
     private class Node {
         Point point;
         int g;
@@ -26,7 +26,7 @@ class AStar extends PathFinder {
     }
     
     @Override
-    public PathFindingResult search(Map map, Point start, Point finish, PFConsoleRenderer renderer) {
+    public PathFindingResult search(Map map, Point start, Point finish, Renderer renderer) {
         if (isNoWayAPriori(map, start, finish)) 
             return null;
         initBase(map);

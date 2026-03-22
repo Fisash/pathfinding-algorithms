@@ -1,7 +1,7 @@
 package com.example;
 import java.util.*;
 
-abstract class PathFinder {
+public abstract class PathFinder {
     protected final int[][] DIRECTIONS = {
         {1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {1,-1}, {-1,1}, {-1,-1}
     };
@@ -36,5 +36,5 @@ abstract class PathFinder {
         return map.getCell(start) == Map.WALL || map.getCell(finish) == Map.WALL;
     }
     
-    public abstract PathFindingResult search(Map map, Point start, Point finish, PFConsoleRenderer renderer);
+    public abstract PathFindingResult search(Map map, Point start, Point finish, Renderer renderer);
 }
