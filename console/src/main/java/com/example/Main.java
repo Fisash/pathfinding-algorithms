@@ -34,9 +34,9 @@ class Main{
         }
     }
 
-    public void run(){
+    public void run(String configPath){
         try {
-            config = new Config("configs/pf.conf");
+            config = new Config(configPath);
         }
         catch (IOException e){
             System.err.println("Error of read config");
@@ -76,6 +76,13 @@ class Main{
     }
 
     public static void main(String[] args){
-        new Main().run();
+        if(args.length == 0)
+            System.out.println("Choose config menu");
+        else if (args.length == 1) {
+            String configPath = args[0];
+            new Main().run(configPath);
+        }
+        else 
+          System.out.println("Too much arguments");
     }
 }
