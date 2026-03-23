@@ -22,12 +22,12 @@ for MODE in "${MODES[@]}"; do
     if [ "$MODE" == "mac" ]; then SEARCH_MODE="macos"; fi
     if [ "$MODE" == "all-platforms" ]; then SEARCH_MODE="all"; fi
 
-    cp graphic/target/path-finding-graphic-*-${SEARCH_MODE}.jar "$DEST/"
+    cp graphic/target/main_graphic*-${SEARCH_MODE}.jar "$DEST/"
 done
 
 echo ">>> Copying console and core modules..."
-cp console/target/path-finding-console-*.jar "$DEST/"
-cp core/target/path-finding-core-*.jar "$DEST/"
+cp console/target/main_console.jar "$DEST/"
+cp core/target/core.jar "$DEST/lib"
 
 echo "Release ready in /$DEST/ ---"
 ls -lh "$DEST"

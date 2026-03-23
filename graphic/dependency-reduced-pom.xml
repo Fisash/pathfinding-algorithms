@@ -19,7 +19,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>${project.artifactId}-${project.version}-${platform.suffix}</finalName>
+              <finalName>main_graphic-${platform.suffix}</finalName>
               <transformers>
                 <transformer>
                   <mainClass>com.example.graphic.Main</mainClass>

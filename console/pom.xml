@@ -33,5 +33,6 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>main_console</finalName>
     </build>
 </project>
