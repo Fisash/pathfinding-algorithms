@@ -1,7 +1,5 @@
 package com.example.tui;
 
-import com.example.Config;
-
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -17,30 +15,28 @@ public class Main {
 
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
         Screen screen = new TerminalScreen(terminal);
-        screen.startScreen(); 
-        screen.setCursorPosition(null); 
+        screen.startScreen();
+        screen.setCursorPosition(null);
 
-        ConfigList configList = new ConfigList("34");
+        ConfigList configList = new ConfigList("./configs", 4, 4);
+        
+        Component currentFocus = configList.getFirst();
+
         while (true) {
             screen.clear();
             TextGraphics tg = screen.newTextGraphics();
             tg.putString(2, 2, "Path-finding-TUI");
 
-            configList.draw(tg, 4, 4);
+            configList.draw(tg, currentFocus);
 
-            screen.refresh(); //draw screen buffer to terminal
+            screen.refresh();
 
-            //input
             KeyStroke key = screen.readInput();
             if (key.getKeyType() == KeyType.Escape) break;
             
-            if (key.getKeyType() == KeyType.ArrowDown) {
-                configList.moveDown();
-            } else if (key.getKeyType() == KeyType.ArrowUp) {
-                configList.moveUp();
-            }
+            if (currentFocus != null)
+                currentFocus = currentFocus.handleInput(key);
         }
-
-        screen.stopScreen(); 
+        screen.stopScreen();
     }
 }

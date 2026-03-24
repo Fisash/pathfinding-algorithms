@@ -1,53 +1,49 @@
 package com.example.tui;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.TextColor;
 
-import java.util.Arrays;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-class ConfigList {
-    private List<ConfigPanel> items;
+public class ConfigList {
+    private List<Button> buttons = new ArrayList<>();
 
-    private int selectedIndex;
-
-    public void moveUp() {
-        selectedIndex = Math.max(0, selectedIndex - 1);
+    public ConfigList(String loadPath, int startX, int startY) {
+        loadFromPath(loadPath, startX, startY);
     }
 
-    public void moveDown() {
-        selectedIndex = Math.min(items.size() - 1, selectedIndex + 1);
-    }
+    private void loadFromPath(String loadPath, int x, int y) {
+        String[] names = {"Первый пункт", "Второй пункт", "Третий пункт", "Четвертый пункт"};
 
-    ConfigList(String loadPath) {
-        loadFromPath(loadPath);
-    }
+        for (int i = 0; i < names.length; i++) {
+            String name = names[i];
+            Button btn = new Button(name, x, y + i, () -> {
+                System.out.println("Нажато: " + name);
+            });
+            buttons.add(btn);
+        }
 
-    public void loadFromPath(String loadPath) {
-
-        items = Arrays.asList(
-            new ConfigPanel("Первый пункт", "1"),
-            new ConfigPanel("Первый пункт", "1"),
-            new ConfigPanel("Первый пункт", "1"),
-            new ConfigPanel("Первый пункт", "1")
-        );
-    }    
-    
-    public void draw (TextGraphics tg, int xPos, int yPos) {
-        for (int i = 0; i < items.size(); i++) {
-            if (i == selectedIndex) {
-                tg.setForegroundColor(TextColor.ANSI.BLACK);
-                tg.setBackgroundColor(TextColor.ANSI.WHITE);
-            }
-            else {
-                tg.setForegroundColor(TextColor.ANSI.WHITE);
-                tg.setBackgroundColor(TextColor.ANSI.BLACK);
-            }
-            tg.putString(xPos, yPos + i, items.get(i).getName());
+        for (int i = 0; i < buttons.size(); i++) {
+            if (i > 0) 
+                buttons.get(i).up = buttons.get(i - 1);
+            
+            if (i < buttons.size() - 1)
+                buttons.get(i).down = buttons.get(i + 1);
+            
         }
     }
 
-    public void handleInput() {
+    public void draw (TextGraphics tg, Component focus) {
+        for (Button btn : getButtons())
+            btn.draw(tg, btn == focus);
+    }
 
+    public Button getFirst() {
+        return buttons.isEmpty() ? null : buttons.get(0);
+    }
+
+    public List<Button> getButtons() {
+        return buttons;
     }
 }
