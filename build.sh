@@ -25,9 +25,10 @@ for MODE in "${MODES[@]}"; do
     cp graphic/target/main_graphic*-${SEARCH_MODE}.jar "$DEST/"
 done
 
-echo ">>> Copying console and core modules..."
-cp console/target/main_console.jar "$DEST/"
+echo ">>> Copying modules..."
+cp console-visualizer/target/console-visualizer.jar "$DEST/"
 cp core/target/core.jar "$DEST/lib"
+cp tui/target/tui.jar "$DEST/"
 
 echo "Release ready in /$DEST/ ---"
 ls -lh "$DEST"

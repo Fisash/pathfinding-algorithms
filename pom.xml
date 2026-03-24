@@ -13,7 +13,8 @@
     <modules>
         <module>core</module>
         <module>graphic</module>
-        <module>console</module>
+        <module>console-visualizer</module>
+        <module>tui</module>
     </modules>
 
     <properties>
@@ -21,6 +22,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lwjgl.version>3.3.3</lwjgl.version>
+        <lanterna.version>3.1.1</lanterna.version>
     </properties>
 
     <dependencyManagement>
@@ -113,6 +115,13 @@
                 <version>${lwjgl.version}</version>
                 <classifier>natives-macos</classifier>
                 <scope>runtime</scope>
+            </dependency>
+
+            <!-- tui -->
+            <dependency>
+                <groupId>com.googlecode.lanterna</groupId>
+                <artifactId>lanterna</artifactId>
+                <version>${lanterna.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
