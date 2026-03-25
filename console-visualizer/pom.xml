@@ -8,6 +8,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>com.example.console</groupId>
+
     <artifactId>path-finding-console-visualizer</artifactId>
     <packaging>jar</packaging>
 

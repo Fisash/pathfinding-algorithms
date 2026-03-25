@@ -18,16 +18,23 @@ public class Main {
         screen.startScreen();
         screen.setCursorPosition(null);
 
-        ConfigList configList = new ConfigList("./configs", 4, 4);
-        
-        Component currentFocus = configList.getFirst();
+        ConfigList configList = new ConfigList("./configs", 4, 5);
+
+        Button createNew = new Button ("[Create new]", 3, 3, configList::createNew); 
+        Component currentFocus = createNew;
+
+        if(configList.getFirst() != null) {
+            createNew.down = configList.getFirst();
+            configList.getFirst().up = createNew;
+        }
 
         while (true) {
             screen.clear();
             TextGraphics tg = screen.newTextGraphics();
-            tg.putString(2, 2, "Path-finding-TUI");
+            tg.putString(2, 1, "Path-finding-TUI");
 
             configList.draw(tg, currentFocus);
+            createNew.draw(tg, currentFocus == createNew);
 
             screen.refresh();
 

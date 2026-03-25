@@ -43,7 +43,7 @@ class Main{
             return;
         }
 
-        map = new Map(config.MAP_FILE_PATH);
+        map = config.map;
 
         if (map == null){
             System.err.println("Error of create map by file");

@@ -7,43 +7,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigList {
-    private List<Button> buttons = new ArrayList<>();
+    private List<ConfigPanel> panels = new ArrayList<>();
 
     public ConfigList(String loadPath, int startX, int startY) {
         loadFromPath(loadPath, startX, startY);
     }
 
-    private void loadFromPath(String loadPath, int x, int y) {
-        String[] names = {"Первый пункт", "Второй пункт", "Третий пункт", "Четвертый пункт"};
+    public void createNew() {
+        loadFromPath("./config", 8, 8);
+    }
 
-        for (int i = 0; i < names.length; i++) {
-            String name = names[i];
-            Button btn = new Button(name, x, y + i, () -> {
-                System.out.println("Нажато: " + name);
-            });
-            buttons.add(btn);
+    private void loadFromPath(String loadPath, int x, int y) {
+        File folder = new File(loadPath);
+
+        if (!folder.exists() || !folder.isDirectory()) {
+            //dir is no found
+            return;
         }
 
-        for (int i = 0; i < buttons.size(); i++) {
-            if (i > 0) 
-                buttons.get(i).up = buttons.get(i - 1);
-            
-            if (i < buttons.size() - 1)
-                buttons.get(i).down = buttons.get(i + 1);
-            
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".properties"));
+
+        panels = new ArrayList<>();
+
+        int index = 0;
+
+        for (File file : files) {
+            String path = file.getPath();
+            String name = file.getName().replace(".properties", "");
+
+            Button btn = new Button(name, x, y + index, () -> {
+                System.out.println("Выбран конфиг: " + path);
+            });
+
+            ConfigPanel panel = new ConfigPanel(path, btn);
+            panels.add(panel);
+
+            index++;
+        }
+
+        for (int i = 0; i < panels.size(); i++) {
+            if (i > 0)
+                panels.get(i).getButton().up = panels.get(i - 1).getButton();
+
+            if (i < panels.size() - 1)
+                panels.get(i).getButton().down = panels.get(i + 1).getButton();
         }
     }
 
     public void draw (TextGraphics tg, Component focus) {
-        for (Button btn : getButtons())
-            btn.draw(tg, btn == focus);
+        for (ConfigPanel panel : panels)
+            panel.getButton().draw(tg, panel.getButton() == focus);
     }
 
     public Button getFirst() {
-        return buttons.isEmpty() ? null : buttons.get(0);
+        return panels.isEmpty() ? null : panels.get(0).getButton();
     }
 
-    public List<Button> getButtons() {
-        return buttons;
-    }
 }

@@ -1,4 +1,4 @@
-/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/ConsoleRenderFrameOptions.java
-/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/Main.java
-/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/PFConsoleRenderCell.java
-/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/PFConsoleRenderer.java
+/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/console/ConsoleRenderFrameOptions.java
+/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/console/Main.java
+/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/console/PFConsoleRenderCell.java
+/home/fisash/Study/java/pathfinding-algorithms/console-visualizer/src/main/java/com/example/console/PFConsoleRenderer.java

@@ -77,6 +77,12 @@ class PFConsoleRenderer implements Renderer {
         return result.toString();
     }
 
+    public String buildFrame(Map map, int[][] distances, List<Point> path) {
+        renderDistances(distances);
+        renderPath(map, path);
+        return renderToString(cellWidth);
+    }
+
     private void renderPath
         (Map map, List<Point> path){
         for(int i = 0; i < render.length; i++){

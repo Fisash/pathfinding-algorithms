@@ -18,6 +18,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.example.console</groupId>
+            <artifactId>path-finding-console-visualizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.lanterna</groupId>
             <artifactId>lanterna</artifactId>
         </dependency>
@@ -40,13 +45,14 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.example.tui.Main</mainClass>
                                     <manifestEntries>
-                                      <Class-Path>lib/core.jar</Class-Path>
+                                      <Class-Path>lib/core.jar console-visualizer.jar</Class-Path>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
                             <artifactSet>
                                 <excludes>
                                     <exclude>com.example:path-finding-core</exclude>
+                                    <exclude>com.example.console:path-finding-visualizer</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

@@ -57,27 +57,19 @@ public class Map{
         this.cells = cells;
     }
 
-    public Map(String filepath) {
-        File file = new File(filepath);
-        try (Scanner scanner = new Scanner(file)){
-            ArrayList<String> lines = new ArrayList<>();
-        
-            while (scanner.hasNextLine())
-                lines.add(scanner.nextLine());
-        
-            int height = lines.size();
-            String[] firstRow = lines.get(0).trim().split("\s+");
-            int width = firstRow.length;
+    public Map(String mapString) {
+        String[] rows = mapString.split(";");
 
-            cells = new int [height][width];
-            for(int i = 0; i < height; i++){
-                String[] stringCells = lines.get(i).trim().split("\s+");
-                for(int j = 0; j < width; j++)
-                    cells[i][j] = Integer.parseInt(stringCells[j]);
+        int height = rows.length;
+        int width = rows[0].trim().split("\\s+").length;
+
+        cells = new int[height][width];
+
+        for (int i = 0; i < height; i++) {
+            String[] nums = rows[i].trim().split("\\s+");
+            for (int j = 0; j < width; j++) {
+                cells[i][j] = Integer.parseInt(nums[j]);
             }
-        }
-        catch (FileNotFoundException e){
-            System.err.println("file for map not found");
         }
     }
 }

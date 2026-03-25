@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Config {
 
-    public String MAP_FILE_PATH;
+    public Map map;
 
     public Point start;
     public Point finish;
@@ -19,7 +19,10 @@ public class Config {
             Properties props = new Properties();
             props.load(reader);
 
-            MAP_FILE_PATH = props.getProperty("map_path");
+            String mapString = props.getProperty("map");
+            if (mapString == null || mapString.isEmpty())
+                throw new IllegalArgumentException("Map string is empty");
+            map = new Map(mapString);
 
             String[] startString = props.getProperty("start").split(";");
             int start_x = Integer.parseInt(startString[0].trim());

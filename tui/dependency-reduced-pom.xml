@@ -24,13 +24,14 @@
                 <transformer>
                   <mainClass>com.example.tui.Main</mainClass>
                   <manifestEntries>
-                    <Class-Path>lib/core.jar</Class-Path>
+                    <Class-Path>lib/core.jar console-visualizer.jar</Class-Path>
                   </manifestEntries>
                 </transformer>
               </transformers>
               <artifactSet>
                 <excludes>
                   <exclude>com.example:path-finding-core</exclude>
+                  <exclude>com.example.console:path-finding-visualizer</exclude>
                 </excludes>
               </artifactSet>
             </configuration>
