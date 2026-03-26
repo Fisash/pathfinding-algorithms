@@ -32,3 +32,4 @@ cp tui/target/tui.jar "$DEST/"
 
 echo "Release ready in /$DEST/ ---"
 ls -lh "$DEST"
+cd "$DEST"

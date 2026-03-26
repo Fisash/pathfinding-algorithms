@@ -59,8 +59,11 @@ public class ConfigList {
             panel.getButton().draw(tg, panel.getButton() == focus);
     }
 
-    public Button getFirst() {
+    public Button getFirstButton() {
         return panels.isEmpty() ? null : panels.get(0).getButton();
+    }
+    public ConfigPanel getFirst() {
+        return panels.isEmpty() ? null : panels.get(0);
     }
 
 }

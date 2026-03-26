@@ -8,12 +8,16 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import com.example.Map;
+
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
+        System.out.println("START");
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
+        System.out.println("AFTER TERMINAL");
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
         screen.setCursorPosition(null);
@@ -23,10 +27,20 @@ public class Main {
         Button createNew = new Button ("[Create new]", 3, 3, configList::createNew); 
         Component currentFocus = createNew;
 
-        if(configList.getFirst() != null) {
-            createNew.down = configList.getFirst();
-            configList.getFirst().up = createNew;
+        LanternaRendererAdapter adapter;
+        Map currentMap;
+
+        if (configList.getFirst() == null) {
+            screen.stopScreen();
+            System.out.println("NO CONFIGS");
+            return;
         }
+
+        createNew.down = configList.getFirstButton();
+        configList.getFirstButton().up = createNew;
+
+        currentMap = configList.getFirst().getConfig().map;
+        adapter = new LanternaRendererAdapter(screen, currentMap, 16, 4); 
 
         while (true) {
             screen.clear();
@@ -35,6 +49,13 @@ public class Main {
 
             configList.draw(tg, currentFocus);
             createNew.draw(tg, currentFocus == createNew);
+            try {
+                adapter.renderFrame(currentMap);
+            }
+            catch (Exception e) {
+                  screen.stopScreen();
+                  e.printStackTrace();
+            }
 
             screen.refresh();
 

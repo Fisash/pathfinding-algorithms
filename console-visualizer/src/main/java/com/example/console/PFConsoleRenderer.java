@@ -6,15 +6,19 @@ import com.example.Renderer;
 
 import java.util.List;
 
-class PFConsoleRenderer implements Renderer {
+public class PFConsoleRenderer implements Renderer {
     private ConsoleRenderFrameOptions frame;
     private final int msDisplayStateDelay; 
     private PFConsoleRenderCell[][] render;
     private int cellWidth;
 
+    public void setCellWidth(int value) {
+        cellWidth = value;
+    }
+
     private boolean isHideDistancesInResult = true;
 
-    PFConsoleRenderer(int msDisplayStateDelay, ConsoleRenderFrameOptions frame, Map initMap){
+    public PFConsoleRenderer(int msDisplayStateDelay, ConsoleRenderFrameOptions frame, Map initMap){
         this.msDisplayStateDelay = msDisplayStateDelay; 
         this.frame = frame;
         cellWidth = evaluateCellWidth(initMap);
@@ -58,7 +62,7 @@ class PFConsoleRenderer implements Renderer {
         System.out.print(renderToString(cellWidth));
     } 
 
-    private String renderToString (int cellWidth){
+    public String renderToString (int cellWidth){
         StringBuilder result = new StringBuilder();
         int i, j;
         int lineLength = render[0].length;
@@ -111,14 +115,14 @@ class PFConsoleRenderer implements Renderer {
         }
     }
 
-    private void renderMap(Map map){
+    public void renderMap(Map map){
         for(int i = 0; i < render.length; i++){
             for(int j = 0; j < render[i].length; j++)
                 render[i][j] = new PFConsoleRenderCell(map.getCell(j, i));
         }
     }
     
-    private void initRender(Map map){
+    public void initRender(Map map){
         int width = map.getWidth();
         int height = map.getHeight();
         render = new PFConsoleRenderCell[height][width];

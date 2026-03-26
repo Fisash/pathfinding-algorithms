@@ -1,10 +1,10 @@
 package com.example.console;
-class ConsoleRenderFrameOptions{
+public class ConsoleRenderFrameOptions{
     char h_view;
     char v_view;
     char[] corners;
     
-    ConsoleRenderFrameOptions(char h_view, char v_view, char corners[]){
+    public ConsoleRenderFrameOptions(char h_view, char v_view, char corners[]){
         this.h_view = h_view;
         this.v_view = v_view;
         this.corners = corners;
