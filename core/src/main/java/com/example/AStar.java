@@ -15,7 +15,9 @@ public class AStar extends PathFinder {
     
     PriorityQueue<Node> openSet;
     
-    private void initSpecific(){
+    @Override
+    protected void init(Map map){
+        super.init(map);
         openSet = new PriorityQueue<>(Comparator.comparingInt(n -> n.f));
         for (int i = 0; i < height; i++)
             Arrays.fill(distances[i], Integer.MAX_VALUE);
@@ -26,11 +28,11 @@ public class AStar extends PathFinder {
     }
     
     @Override
-    public PathFindingResult search(Map map, Point start, Point finish, Renderer renderer) {
+    public PathFindingResult find(Map map, Point start, Point finish, Renderer renderer) {
         if (isNoWayAPriori(map, start, finish)) 
             return null;
-        initBase(map);
-        initSpecific();
+        init(map);
+        currentState.finish = finish;
         distances[start.y][start.x] = 0;
         openSet.add(new Node(start, 0, heuristic(start, finish)));
         
@@ -55,11 +57,13 @@ public class AStar extends PathFinder {
                 if (newG < distances[ny][nx]) {
                     ancestors[ny][nx] = cell;
                     distances[ny][nx] = newG;
+                    currentState.visited[ny][nx] = true;
                     int f = newG + heuristic(neighbor, finish);
                     openSet.add(new Node(neighbor, newG, f));
                     iterationCount++;
+                    updateState(buildPath(start, neighbor));
                     if (renderer != null)
-                        renderer.stateHandle(map, distances, buildPath(start, neighbor));
+                        renderer.update(currentState);
                 }
             }
         }

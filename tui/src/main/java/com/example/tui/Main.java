@@ -27,7 +27,6 @@ public class Main {
         Button createNew = new Button ("[Create new]", 3, 3, configList::createNew); 
         Component currentFocus = createNew;
 
-        LanternaRendererAdapter adapter;
         Map currentMap;
 
         if (configList.getFirst() == null) {
@@ -40,7 +39,6 @@ public class Main {
         configList.getFirstButton().up = createNew;
 
         currentMap = configList.getFirst().getConfig().map;
-        adapter = new LanternaRendererAdapter(screen, currentMap, 16, 4); 
 
         while (true) {
             screen.clear();
@@ -49,13 +47,6 @@ public class Main {
 
             configList.draw(tg, currentFocus);
             createNew.draw(tg, currentFocus == createNew);
-            try {
-                adapter.renderFrame(currentMap);
-            }
-            catch (Exception e) {
-                  screen.stopScreen();
-                  e.printStackTrace();
-            }
 
             screen.refresh();
 

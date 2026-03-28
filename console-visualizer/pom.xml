@@ -31,6 +31,9 @@
                         <manifest>
                             <mainClass>com.example.console.Main</mainClass>
                         </manifest>
+                        <manifestEntries>
+                          <Class-Path>lib/core.jar</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>

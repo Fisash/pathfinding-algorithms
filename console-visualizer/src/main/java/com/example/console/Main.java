@@ -50,10 +50,10 @@ class Main{
             return;
         }
 
-        ConsoleRenderFrameOptions baseFrame = 
-        new ConsoleRenderFrameOptions('═', '║', new char[]{'╔', '╗', '╚', '╝'});
+        ConsoleFrameOptions baseFrame = 
+        new ConsoleFrameOptions('═', '║', new char[]{'╔', '╗', '╚', '╝'});
 
-        Renderer renderer = new PFConsoleRenderer(config.rendererStateDelay, baseFrame, map);
+        Renderer renderer = new ConsoleRenderer(config.rendererStateDelay, baseFrame, map);
 
         createPF();
 
@@ -62,7 +62,7 @@ class Main{
             return;
         }
 
-        PathFindingResult result = pathFinder.search(map, config.start, config.finish, renderer);
+        PathFindingResult result = pathFinder.find(map, config.start, config.finish, renderer);
         List<Point> path = result.path;
 
         if (path == null){
@@ -70,9 +70,10 @@ class Main{
             return;
         }
 
+        renderer.endAnimation();
+        renderer.drawPath(path);
         System.out.println("Path found by " + config.algorithm.name());
         System.out.println(result.toString());
-        renderer.draw(map, path);
     }
 
     public static void main(String[] args){

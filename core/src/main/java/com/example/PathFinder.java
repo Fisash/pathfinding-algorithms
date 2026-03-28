@@ -9,17 +9,29 @@ public abstract class PathFinder {
     protected int[][] distances;
     protected Point[][] ancestors;
     protected int width, height;
+
+    protected PathFindingState currentState;
     
     protected int iterationCount;
     
-    protected void initBase(Map map) {
+    protected void init(Map map) {
         width = map.getWidth();
         height = map.getHeight();
         distances = new int[height][width];
         ancestors = new Point[height][width];
+
+        currentState = new PathFindingState();
+        currentState.visited = new boolean[height][width];
+        currentState.values = distances;
+
         iterationCount = 0;
     }
-    
+
+    protected void updateState(List<Point> currentPath) {
+        currentState.values = distances;
+        currentState.currentPath = currentPath;
+    }
+
     protected List<Point> buildPath(Point start, Point finish) {
         List<Point> path = new ArrayList<>();
         Point current = finish;
@@ -36,5 +48,5 @@ public abstract class PathFinder {
         return map.getCell(start) == Map.WALL || map.getCell(finish) == Map.WALL;
     }
     
-    public abstract PathFindingResult search(Map map, Point start, Point finish, Renderer renderer);
+    public abstract PathFindingResult find(Map map, Point start, Point finish, Renderer renderer);
 }

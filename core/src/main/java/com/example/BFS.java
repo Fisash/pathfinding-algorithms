@@ -2,20 +2,20 @@ package com.example;
 import java.util.*;
 
 public class BFS extends PathFinder {
-
     Queue<Point> queue;
-    private void initSpecific(){
+
+    @Override
+    protected void init(Map map){
+        super.init(map);
         queue = new LinkedList<>();
-        for (int i = 0; i < height; i++)
-            Arrays.fill(distances[i], -1); //-1 distance is not visited cell
     }
 
     @Override
-    public PathFindingResult search (Map map, Point start, Point finish, Renderer renderer) {
+    public PathFindingResult find (Map map, Point start, Point finish, Renderer renderer) {
         if (isNoWayAPriori(map, start, finish)) 
             return null;
-        initBase(map);
-        initSpecific();
+        init(map);
+        currentState.finish = finish;
         queue.add(start);
         distances[start.y][start.x] = 0;
         
@@ -30,14 +30,17 @@ public class BFS extends PathFinder {
                 nx = cell.x + dir[0];
                 ny = cell.y + dir[1];
                 Point neighbor = new Point(nx, ny);
-                if (!map.isSuitableToVisit(neighbor) || distances[ny][nx] != -1) 
+                if (!map.isSuitableToVisit(neighbor) || 
+                    currentState.visited[ny][nx]) 
                     continue;
                 distances[ny][nx] = distances[cell.y][cell.x] + 1;
+                currentState.visited[ny][nx] = true;
                 ancestors[ny][nx] = cell;
                 queue.add(neighbor);
                 iterationCount++;
+                updateState(buildPath(start, neighbor));
                 if (renderer != null)
-                    renderer.stateHandle(map, distances, buildPath(start, neighbor));
+                    renderer.update(currentState);
             }
         }
         return null;

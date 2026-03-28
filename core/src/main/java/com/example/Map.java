@@ -7,6 +7,12 @@ import java.util.Scanner;
 public class Map{
     public final static int WALL = 1;
     public final static int FREE = 0;
+    public boolean isWall(int value) {
+        return value == WALL;
+    }
+    public boolean isWall(int x, int y) {
+        return cells[y][x] == WALL;
+    }
 
     private int[][] cells;
    

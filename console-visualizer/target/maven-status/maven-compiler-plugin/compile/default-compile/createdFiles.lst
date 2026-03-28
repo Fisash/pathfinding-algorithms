@@ -1,5 +1,5 @@
-com/example/console/PFConsoleRenderCell.class
+com/example/console/ConsoleFrameOptions.class
+com/example/console/ConsoleColors.class
 com/example/console/Main.class
-com/example/console/PFConsoleRenderer.class
-com/example/console/ConsoleRenderFrameOptions.class
+com/example/console/ConsoleRenderer.class
 com/example/console/Main$1.class

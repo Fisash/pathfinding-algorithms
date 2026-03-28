@@ -1,19 +1,28 @@
 package com.example;
 
-class RenderCell {
+public class RenderCell {
 
-    public static enum PathType {
-        NotPath, DefaultNode, Start, IntermediateCurrentNode, Finish
+    public static enum PathRole {
+        START, INTERMEDIATE_FINISH, FINISH
     }
 
-    int mapCellType;
-    int intValue;
-    PathType pathType;
+    public boolean isWall;
+    public boolean isVisited;
+    public boolean isOnOpenSet;
+    public boolean isPath;
+    public int value;
+    public PathRole role;
 
-    RenderCell (int mapCellType, int intValue, PathType pathType) {
-        this.mapCellType = mapCellType;
-        this.pathType = pathType;
-        this.intValue = intValue;
+    public RenderCell() {}
+    
+    public RenderCell (boolean isWall, boolean isVisited, boolean isOnOpenSet,
+                boolean isPath, int value, PathRole role) { 
+        this.isWall = isWall;
+        this.isVisited = isVisited;
+        this.isOnOpenSet = isOnOpenSet;
+        this.isPath = isPath;
+        this.value = value;
+        this.role = role;
     }
     
 }
