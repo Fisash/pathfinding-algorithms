@@ -12,9 +12,10 @@
 
     <modules>
         <module>core</module>
-        <module>graphic</module>
+        <module>text-renderer</module>
         <module>console-visualizer</module>
         <module>tui</module>
+        <module>graphic</module>
     </modules>
 
     <properties>

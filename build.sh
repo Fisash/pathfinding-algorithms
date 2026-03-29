@@ -28,6 +28,7 @@ done
 echo ">>> Copying modules..."
 cp console-visualizer/target/console-visualizer.jar "$DEST/"
 cp core/target/core.jar "$DEST/lib"
+cp text-renderer/target/text-renderer.jar "$DEST/lib"
 cp tui/target/tui.jar "$DEST/"
 
 echo "Release ready in /$DEST/ ---"

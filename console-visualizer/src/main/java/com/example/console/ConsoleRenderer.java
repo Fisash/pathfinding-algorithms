@@ -1,65 +1,34 @@
 package com.example.console;
 
 import com.example.Map;
-import com.example.Renderer;
 import com.example.RenderCell;
 import com.example.PathFindingState;
+import com.example.text.TextCell;
+import com.example.text.TextRenderConfig;
+import com.example.text.TextRenderer;
 
-import java.util.List;
+public class ConsoleRenderer extends TextRenderer {
 
-public class ConsoleRenderer extends Renderer {
-
-    private String BG_COLOR;
-
-    private String WALL, PATHPOINT, START, FINISH, INTERM_FINISH, UNVISITED;
-
-    private String RAW_WALL = " "; 
-    private String RAW_PATHPOINT = "●";
-    private String RAW_START = "S";
-    private String RAW_FINISH = "F";
-    private String RAW_INTERM_FINISH = "F";
-    private String RAW_UNVISITED = " ";
-
-    private String WIDTH_FILLER = " ";
-
+    private final ConsoleFrame frame;
+    private final int msDisplayStateDelay;
     private String cellSeparator = "";
-
     private int cellWidth;
+    private int cellWidthForAnimation;
+    private String widthFiller = " ";
 
-    private int cellWidthForAnimation; 
-
-    private void initChars() {
-        BG_COLOR = ConsoleColors.BG_BLACK;
-
-        WALL = fillToWidth(RAW_WALL);
-        PATHPOINT = fillToWidth(RAW_PATHPOINT);
-        START = fillToWidth(RAW_START);
-        FINISH = fillToWidth(RAW_FINISH);
-        INTERM_FINISH = fillToWidth(RAW_INTERM_FINISH);
-        UNVISITED = fillToWidth(RAW_UNVISITED);
-
-        WALL = ConsoleColors.backgroundize(WALL, ConsoleColors.BG_BLUE);
-        PATHPOINT = 
-        ConsoleColors.wrap(PATHPOINT, ConsoleColors.RED, BG_COLOR);
-        START = 
-        ConsoleColors.wrap(START, ConsoleColors.RED, BG_COLOR);
-        FINISH = 
-        ConsoleColors.wrap(FINISH, ConsoleColors.RED, BG_COLOR);
-        INTERM_FINISH = 
-        ConsoleColors.wrap(INTERM_FINISH, ConsoleColors.YELLOW, BG_COLOR);
-        UNVISITED = 
-        ConsoleColors.backgroundize(UNVISITED, BG_COLOR);
+    public ConsoleRenderer(int msDisplayStateDelay, ConsoleFrame frame, Map map) {
+        super(map, new TextRenderConfig());
+        this.msDisplayStateDelay = msDisplayStateDelay;
+        this.frame = frame;
+        this.cellWidthForAnimation = evaluateCellWidth(map);
+        startAnimation();
     }
-
-    private ConsoleFrameOptions frame;
-    private final int msDisplayStateDelay; 
 
     @Override
     public void startAnimation() {
         super.startAnimation();
         cellWidth = cellWidthForAnimation;
         cellSeparator = "";
-        initChars();
     }
 
     @Override
@@ -67,54 +36,65 @@ public class ConsoleRenderer extends Renderer {
         super.endAnimation();
         cellWidth = 2;
         cellSeparator = "";
-        initChars();
     }
 
-    public ConsoleRenderer(int msDisplayStateDelay, ConsoleFrameOptions frame, Map initMap) {
-        super(initMap);
-        cellWidthForAnimation = evaluateCellWidth(initMap);
-        startAnimation();
-        this.msDisplayStateDelay = msDisplayStateDelay; 
-        this.frame = frame;
+    @Override
+    protected void drawCell(int x, int y, TextCell cell) {
+        String s = padToWidth(cell.text);
+        s = ConsoleColorAdapter.wrap(s, cell.fg, cell.bg);
+        System.out.print(s);
+        if (x < getBufferCols() - 1)
+            System.out.print(cellSeparator);
+        if (x == getBufferCols() - 1)
+            System.out.println();
     }
 
-    private String fillToWidth(String content){
-       int length = content.length();
-        if (length == cellWidth)
-            return content;
-        if (length < cellWidth) {
-            int zerosToAdd = cellWidth - length;
-            StringBuilder result = new StringBuilder(cellWidth);
-            for (int i = 0; i < zerosToAdd; i++)
-                result.append(WIDTH_FILLER);
-            result.append(content);
-            return result.toString();
+    private String padToWidth(String s) {
+        int len = s.length();
+        if (len < cellWidth) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < cellWidth - len; i++)
+                sb.append(widthFiller);
+            sb.append(s);
+            return sb.toString();
+        } else if (len > cellWidth)
+            return s.substring(len - cellWidth);
+        return s;
+    }
+
+    @Override
+    public void draw() {
+        clear(); 
+        int rows = getBufferRows();
+        int cols = getBufferCols();
+        int separatorWidth = cellSeparator.length();
+
+        frame.drawTopLine(cols, cellWidth, separatorWidth);
+
+        for (int y = 0; y < rows; y++) {
+            System.out.print(frame.v);
+            for (int x = 0; x < cols; x++) {
+                TextCell cell = mapCell(buffer[y][x]);
+                String s = padToWidth(cell.text);
+                s = ConsoleColorAdapter.wrap(s, cell.fg, cell.bg);
+                System.out.print(s);
+                if (x < cols - 1)
+                    System.out.print(cellSeparator);
+            }
+            System.out.print(frame.v + "\n");
         }
-        else 
-            return content.substring(length - cellWidth);
+
+        frame.drawBottomLine(cols, cellWidth, separatorWidth);
+        afterDraw();
     }
 
-    private String getValueCellView(int value) {
-        String base = String.valueOf(value);
-        base = fillToWidth(base);
-        return ConsoleColors.wrap(base, ConsoleColors.WHITE, BG_COLOR);
-    }
-
-    public String stringView(RenderCell cell){
-        if(cell.isWall)
-            return WALL;
-        if(cell.isPath) {
-            if (cell.role == null) 
-                return PATHPOINT;
-            if (cell.role == RenderCell.PathRole.START)
-                return START;
-            if (cell.role == RenderCell.PathRole.FINISH)
-                return FINISH;
-            return INTERM_FINISH;
+    @Override
+    protected void afterDraw() {
+        try {
+            Thread.sleep(msDisplayStateDelay);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        if(!cell.isVisited)
-            return UNVISITED;
-        return getValueCellView(cell.value); 
     }
 
     public static void clear() {
@@ -123,49 +103,7 @@ public class ConsoleRenderer extends Renderer {
     }
 
     public static int evaluateCellWidth(Map map) {
-        int maxPossibleDist = map.getWidth() * map.getHeight();
-        return String.valueOf(maxPossibleDist).length();
-    }
-
-
-    @Override
-    public void update(PathFindingState state) {
-        super.update(state);
-
-        try {
-            Thread.sleep(msDisplayStateDelay); 
-        } 
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    @Override
-    public void draw(){
-        clear();
-        System.out.print(bufferToString());
-    } 
-
-    public String bufferToString () {
-        StringBuilder result = new StringBuilder();
-        int i, j;
-        int rows = getBufferRows();
-        int cols = getBufferCols();
-        int separatorWidth = cellSeparator.length();
-
-        frame.addTopLine(result, cols, cellWidth, separatorWidth);
-        for(i = 0; i < rows; i++){
-            result.append(frame.v_view);
-            for(j = 0; j < cols; j++){
-                result.append(stringView(buffer[i][j]));
-                if (j < cols - 1)
-                    result.append(cellSeparator);
-            }
-            result.append(frame.v_view);
-            result.append("\n");
-        }
-
-        frame.addBottomLine(result, cols, cellWidth, separatorWidth);
-        return result.toString();
+        int maxDist = map.getWidth() * map.getHeight();
+        return String.valueOf(maxDist).length();
     }
 }

@@ -50,8 +50,8 @@ class Main{
             return;
         }
 
-        ConsoleFrameOptions baseFrame = 
-        new ConsoleFrameOptions('═', '║', new char[]{'╔', '╗', '╚', '╝'});
+        ConsoleFrame baseFrame = 
+        new ConsoleFrame('═', '║', '╔', '╗', '╚', '╝');
 
         Renderer renderer = new ConsoleRenderer(config.rendererStateDelay, baseFrame, map);
 

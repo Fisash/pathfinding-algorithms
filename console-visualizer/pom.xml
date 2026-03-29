@@ -1,6 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.example</groupId>
         <artifactId>path-finding-parent</artifactId>
@@ -9,7 +11,6 @@
     </parent>
 
     <groupId>com.example.console</groupId>
-
     <artifactId>path-finding-console-visualizer</artifactId>
     <packaging>jar</packaging>
 
@@ -17,6 +18,13 @@
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>path-finding-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.example.text</groupId>
+            <artifactId>path-finding-text-renderer</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -32,7 +40,7 @@
                             <mainClass>com.example.console.Main</mainClass>
                         </manifest>
                         <manifestEntries>
-                          <Class-Path>lib/core.jar</Class-Path>
+                            <Class-Path>lib/core.jar lib/text-renderer.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>

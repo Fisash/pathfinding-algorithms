@@ -1,5 +1,6 @@
-com/example/console/ConsoleFrameOptions.class
-com/example/console/ConsoleColors.class
+com/example/console/ConsoleColorAdapter.class
+com/example/console/ConsoleFrame.class
+com/example/console/ConsoleColorAdapter$1.class
 com/example/console/Main.class
 com/example/console/ConsoleRenderer.class
 com/example/console/Main$1.class
