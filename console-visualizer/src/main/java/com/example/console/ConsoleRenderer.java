@@ -43,10 +43,8 @@ public class ConsoleRenderer extends TextRenderer {
         String s = padToWidth(cell.text);
         s = ConsoleColorAdapter.wrap(s, cell.fg, cell.bg);
         System.out.print(s);
-        if (x < getBufferCols() - 1)
+        if (x < cols - 1)
             System.out.print(cellSeparator);
-        if (x == getBufferCols() - 1)
-            System.out.println();
     }
 
     private String padToWidth(String s) {
@@ -65,25 +63,16 @@ public class ConsoleRenderer extends TextRenderer {
     @Override
     public void draw() {
         clear(); 
-        int rows = getBufferRows();
-        int cols = getBufferCols();
         int separatorWidth = cellSeparator.length();
-
         frame.drawTopLine(cols, cellWidth, separatorWidth);
-
         for (int y = 0; y < rows; y++) {
             System.out.print(frame.v);
             for (int x = 0; x < cols; x++) {
                 TextCell cell = mapCell(buffer[y][x]);
-                String s = padToWidth(cell.text);
-                s = ConsoleColorAdapter.wrap(s, cell.fg, cell.bg);
-                System.out.print(s);
-                if (x < cols - 1)
-                    System.out.print(cellSeparator);
+                drawCell(x, y, cell);
             }
             System.out.print(frame.v + "\n");
         }
-
         frame.drawBottomLine(cols, cellWidth, separatorWidth);
         afterDraw();
     }

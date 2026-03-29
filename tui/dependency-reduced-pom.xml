@@ -12,7 +12,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.0</version>
+        <version>3.6.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -20,18 +20,18 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <minimizeJar>true</minimizeJar>
               <transformers>
                 <transformer>
                   <mainClass>com.example.tui.Main</mainClass>
                   <manifestEntries>
-                    <Class-Path>lib/core.jar console-visualizer.jar</Class-Path>
+                    <Class-Path>lib/core.jar</Class-Path>
                   </manifestEntries>
                 </transformer>
               </transformers>
               <artifactSet>
                 <excludes>
                   <exclude>com.example:path-finding-core</exclude>
-                  <exclude>com.example.console:path-finding-visualizer</exclude>
                 </excludes>
               </artifactSet>
             </configuration>

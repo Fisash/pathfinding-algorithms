@@ -14,13 +14,13 @@ public abstract class Renderer {
     public void endAnimation() {
         isAnimationGoing = false;
     }
-    
-    public int getBufferRows() {
-        return buffer.length;
-    }
 
+    protected int rows, cols;
+    public int getBufferRows() {
+        return rows;
+    }
     public int getBufferCols() {
-        return buffer[0].length;
+        return cols;
     }
 
     public boolean isInBounds(Point point){
@@ -34,6 +34,8 @@ public abstract class Renderer {
     }
 
     protected void initBuffer(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
         buffer = new RenderCell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++)
@@ -43,9 +45,6 @@ public abstract class Renderer {
 
     //clear isPath and role in buffer
     private void clearPath() {
-        int rows = getBufferRows();
-        int cols = getBufferCols();
-
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++)
             {
@@ -93,8 +92,6 @@ public abstract class Renderer {
 
     //fill value in buffer
     public void fillIntValues(int[][] values) {
-        int rows = values.length;
-        int cols = values[0].length;
         int newValue;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -106,8 +103,6 @@ public abstract class Renderer {
     
     //fill isOnOpenSet in buffer
     public void fillOpenSet(boolean[][] values) {
-        int rows = values.length;
-        int cols = values[0].length;
         boolean newValue;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -119,8 +114,6 @@ public abstract class Renderer {
 
     //fill isVisited in buffer
     public void fillVisits(boolean[][] visits) {
-        int rows = visits.length;
-        int cols = visits[0].length;
         boolean newValue;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -132,9 +125,6 @@ public abstract class Renderer {
 
     //clear isVisited and role in buffer
     private void clearVisits() {
-        int rows = getBufferRows();
-        int cols = getBufferCols();
-
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++)
                 buffer[i][j].isVisited = false;
@@ -142,9 +132,6 @@ public abstract class Renderer {
     }
     //fill isWall in buffer
     public void fillMap(Map map) {
-        int rows = getBufferRows();
-        int cols = getBufferCols();
-
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++)
                buffer[i][j].isWall = map.isWall(j, i);
