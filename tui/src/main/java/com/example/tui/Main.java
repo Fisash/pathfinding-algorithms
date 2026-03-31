@@ -8,54 +8,69 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
-import com.example.Map;
-
+import java.io.File;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
-        System.out.println("START");
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
-        System.out.println("AFTER TERMINAL");
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
         screen.setCursorPosition(null);
 
-        ConfigList configList = new ConfigList("./configs", 4, 5);
+        Panel root = new Panel();
+        root.x = 0;
+        root.y = 2;
 
-        Button createNew = new Button ("[Create new]", 3, 3, configList::createNew); 
-        Component currentFocus = createNew;
+        ListView configListView = new ListView();
+        configListView.x = 3;
+        configListView.y = 5;
+        loadConfigs("./configs", configListView);
 
-        Map currentMap;
+        Button createNew = new Button("Create new", 3, 3, () -> {
+            System.out.println("create new config (to be implemented)");
+        });
 
-        if (configList.getFirst() == null) {
-            screen.stopScreen();
-            System.out.println("NO CONFIGS");
-            return;
-        }
+        root.add(configListView, 3, 5);
+        root.add(createNew, 3, 3);
 
-        createNew.down = configList.getFirstButton();
-        configList.getFirstButton().up = createNew;
+        createNew.down = configListView;
+        configListView.up = createNew;
 
-        currentMap = configList.getFirst().getConfig().map;
+        root.setFocusedChild(createNew);
 
         while (true) {
             screen.clear();
             TextGraphics tg = screen.newTextGraphics();
-            tg.putString(2, 1, "Path-finding-TUI");
+            tg.putString(40, 1, "Path-finding-TUI");
 
-            configList.draw(tg, currentFocus);
-            createNew.draw(tg, currentFocus == createNew);
+            root.draw(tg, false); 
 
             screen.refresh();
 
             KeyStroke key = screen.readInput();
             if (key.getKeyType() == KeyType.Escape) break;
-            
-            if (currentFocus != null)
-                currentFocus = currentFocus.handleInput(key);
+
+            root.handleInput(key);
         }
+
         screen.stopScreen();
+    }
+
+    private static void loadConfigs(String path, ListView listView) {
+        File folder = new File(path);
+        if (!folder.exists() || !folder.isDirectory()) return;
+
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".properties"));
+        if (files == null) return;
+
+        for (File file : files) {
+            String name = file.getName().replace(".properties", "");
+            String fullPath = file.getPath();
+            listView.addItem(name, () -> {
+                System.out.println("Selected config: " + fullPath);
+                // Здесь будет открытие редактора конфига
+            });
+        }
     }
 }

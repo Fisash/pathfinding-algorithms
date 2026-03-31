@@ -7,24 +7,39 @@ import com.googlecode.lanterna.input.KeyType;
 
 public class Button extends Component {
     private String label;
-    private Runnable action; 
+    private String displayText;          
+    private Runnable action;
 
     public Button(String label, int x, int y, Runnable action) {
         this.label = label;
         this.x = x;
         this.y = y;
         this.action = action;
+        this.displayText = label;
+    }
+
+    public String getOriginalLabel() {
+        return label;
+    }
+
+    public void setDisplayText(String displayText) {
+        this.displayText = displayText;
+    }
+
+    public void resetDisplayText() {
+        this.displayText = label;
     }
 
     @Override
-    public Component handleInput(KeyStroke key) {
-        Component next = super.handleInput(key);
-        if (next != this) return next;
+    public boolean handleInput(KeyStroke key) {
+        if (super.handleInput(key))
+            return true;
 
         if (key.getKeyType() == KeyType.Enter && action != null) {
             action.run();
+            return true;
         }
-        return this;
+        return false;
     }
 
     @Override
@@ -37,9 +52,9 @@ public class Button extends Component {
             tg.setForegroundColor(TextColor.ANSI.WHITE);
         }
 
-        tg.putString(x, y, " " + label + " ");
+        tg.putString(x, y, " " + displayText + " ");
 
         tg.setBackgroundColor(TextColor.ANSI.DEFAULT);
         tg.setForegroundColor(TextColor.ANSI.DEFAULT);
     }
-}
+} 
