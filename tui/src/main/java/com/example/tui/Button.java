@@ -11,9 +11,8 @@ public class Button extends Component {
     private Runnable action;
 
     public Button(String label, int x, int y, Runnable action) {
+        super(x, y);
         this.label = label;
-        this.x = x;
-        this.y = y;
         this.action = action;
         this.displayText = label;
     }
@@ -32,7 +31,7 @@ public class Button extends Component {
 
     @Override
     public boolean handleInput(KeyStroke key) {
-        if (super.handleInput(key))
+        if (super.handleInput(key)) //is a navigation key event
             return true;
 
         if (key.getKeyType() == KeyType.Enter && action != null) {

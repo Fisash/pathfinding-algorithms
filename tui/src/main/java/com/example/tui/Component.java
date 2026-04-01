@@ -5,20 +5,25 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
 abstract class Component {
-    protected Component parent;
+    protected Container parent;
     protected Component up, down, left, right;
 
-    public void setParent(Component parent) { 
+    public void setParent(Container parent) { 
         this.parent = parent;
     }
-
-    public Component getParent() { return parent; }
+    public Container getParent() { 
+        return parent; 
+    }
 
     public void setNeighbors(Component up, Component down, Component left, Component right) {
         this.up = up; this.down = down; this.left = left; this.right = right;
     }
 
     protected int x, y;
+    protected Component (int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public boolean handleInput(KeyStroke key) {
         if (isNavigationKey(key)) {
@@ -52,9 +57,5 @@ abstract class Component {
             parent.setFocusedChild(target);
         }
     }
-
-    public void setFocusedChild(Component child) {}
-    public Component getFocusedChild() { return null; }
-
     public abstract void draw(TextGraphics tg, boolean isFocused);
 }

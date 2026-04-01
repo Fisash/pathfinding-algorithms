@@ -12,22 +12,20 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main {
+
+    private static BorderDrawer.BorderStyle singleBorder = BorderDrawer.BorderStyle.SINGLE;
+
     public static void main(String[] args) throws IOException {
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
         screen.setCursorPosition(null);
 
-        Panel root = new Panel();
-        root.x = 0;
-        root.y = 2;
-
-        ListView configListView = new ListView();
-        configListView.x = 3;
-        configListView.y = 5;
+        Panel root = new Panel(0, 2, 40, 40, singleBorder);
+        ListView configListView = new ListView(0, 0, singleBorder);
         loadConfigs("./configs", configListView);
 
-        Button createNew = new Button("Create new", 3, 3, () -> {
+        Button createNew = new Button("Create new", 0, 0, () -> {
             System.out.println("create new config (to be implemented)");
         });
 
@@ -44,7 +42,7 @@ public class Main {
             TextGraphics tg = screen.newTextGraphics();
             tg.putString(40, 1, "Path-finding-TUI");
 
-            root.draw(tg, false); 
+            root.draw(tg, true); 
 
             screen.refresh();
 
@@ -67,9 +65,9 @@ public class Main {
         for (File file : files) {
             String name = file.getName().replace(".properties", "");
             String fullPath = file.getPath();
-            listView.addItem(name, () -> {
+            listView.add(name, () -> {
                 System.out.println("Selected config: " + fullPath);
-                // Здесь будет открытие редактора конфига
+                //todo: config editor open
             });
         }
     }

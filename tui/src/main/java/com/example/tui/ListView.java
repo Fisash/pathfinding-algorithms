@@ -8,84 +8,81 @@ import com.googlecode.lanterna.TextColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListView extends Component {
-    private List<Button> items = new ArrayList<>();
-    private int selectedIndex = 0;
+public class ListView extends Panel {
 
-    public void addItem(String text, Runnable action) {
-        Button btn = new Button(text, x+2, y+1+items.size(), action);
+    private int selectedIndex = 0;
+    private boolean isFixedSize;
+
+    public ListView (int x, int y, int width, int height, 
+        BorderDrawer.BorderStyle borderStyle) {
+        super(x, y, width, height, borderStyle);
+        isFixedSize = true;
+    }
+
+    public ListView(int x, int y, BorderDrawer.BorderStyle borderStyle) {
+        super(x, y, 0, 0, borderStyle);
+        isFixedSize = false;
+    }
+
+    public void add(String text, Runnable action) {
+        Button btn = new Button(text, x+2, y+1+children.size(), action);
         btn.setParent(this);
-        items.add(btn);
-        if (items.size() == 1) {
+        children.add(btn);
+        if (children.size() == 1) {
+            focusedChild = btn;
             if (parent != null)
                 parent.setFocusedChild(this);
         }
         updateSelectionDisplay();
+        if(!isFixedSize) updateSize();
     }
 
     private void updateSelectionDisplay() {
-        for (int i = 0; i < items.size(); i++) {
-            if (i == selectedIndex)
-                items.get(i).setDisplayText("[" + items.get(i).getOriginalLabel() + "]");
+        for (Component child : children) {
+            Button item = (Button)child;
+            if (focusedChild == child)
+                item.setDisplayText("[" + item.getOriginalLabel() + "]");
             else
-                items.get(i).resetDisplayText();
+                item.resetDisplayText();
         }
+    }
+
+    private void scroll(boolean isUp) {
+        selectedIndex += isUp ? -1 : 1;
+        setFocusedChild(children.get(selectedIndex)); 
+        updateSelectionDisplay();
     }
 
     @Override
     public boolean handleInput(KeyStroke key) {
-        if (selectedIndex >= 0 && selectedIndex < items.size()) {
-            if (items.get(selectedIndex).handleInput(key))
-                return true;
-        }
-
         if (key.getKeyType() == KeyType.ArrowUp) {
             if (selectedIndex > 0) {
-                selectedIndex--;
-                updateSelectionDisplay();
+                scroll(true);
                 return true;
             }
         }
 
         if (key.getKeyType() == KeyType.ArrowDown) {
-            if (selectedIndex < items.size() - 1) {
-                selectedIndex++;
-                updateSelectionDisplay();
+            if (selectedIndex < children.size() - 1) {
+                scroll(false);
                 return true;
             }
         }
 
-        return super.handleInput(key);
+        //is not a listview scrolling (or we try go up in uppest element or go down in downest element)
+        return super.handleInput(key); //then try base navigation as a listview (but no list element)
     }
 
-    @Override
-    public void setFocusedChild(Component child) {
-    }
-
-    @Override
-    public Component getFocusedChild() {
-        return null;
-    }
-
-    @Override
-    public void draw(TextGraphics tg, boolean isFocused) {
-        drawBorder(tg);
-        for (int i = 0; i < items.size(); i++) {
-            items.get(i).draw(tg, isFocused && (i == selectedIndex));
-        }
-    }
-
-    private void drawBorder(TextGraphics tg) {
-        if (items.isEmpty()) return;
+    private void updateSize() {
+        if (children.isEmpty()) return;
 
         int maxTextWidth = 0;
-        for (Button btn : items) {
+        for (Component child : children) {
+            Button btn = (Button) child;
             int len = btn.getOriginalLabel().length() + 2;
             if (len > maxTextWidth) maxTextWidth = len;
         }
-        int borderWidth = maxTextWidth + 4;
-        int borderHeight = items.size() + 2;
-
-        BorderDrawer.drawBorder(tg, x, y, borderWidth, borderHeight, BorderDrawer.BorderStyle.SINGLE);
+        width = maxTextWidth + 4;
+        height = children.size() + 2;
     }
 }
