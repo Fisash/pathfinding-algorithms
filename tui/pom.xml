@@ -13,8 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>path-finding-core</artifactId>
+            <groupId>com.example.text</groupId>
+            <artifactId>path-finding-text-renderer</artifactId>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -41,7 +42,7 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.example.tui.Main</mainClass>
                                     <manifestEntries>
-                                      <Class-Path>lib/core.jar</Class-Path>
+                                      <Class-Path>lib/core.jar lib/text-renderer.jar</Class-Path>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>

@@ -1,12 +1,8 @@
 package com.example.tui;
 
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
+import com.example.Config;
+import com.example.Map;
+import com.example.text.TextRenderConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,44 +11,39 @@ public class Main {
 
     private static BorderDrawer.BorderStyle singleBorder = BorderDrawer.BorderStyle.SINGLE;
 
-    public static void main(String[] args) throws IOException {
-        Terminal terminal = new DefaultTerminalFactory().createTerminal();
-        Screen screen = new TerminalScreen(terminal);
-        screen.startScreen();
-        screen.setCursorPosition(null);
+    private static void addMap(ListView<Config> list, App app) {
+        Config pfConfig = list.getItem(0);
 
-        Panel root = new Panel(0, 2, 40, 40, singleBorder);
-        ListView configListView = new ListView(0, 0, singleBorder);
+        Map map = pfConfig.map;
+        TextRenderConfig visualizeConfig = new TextRenderConfig();
+
+        MapView mapView = new MapView(0, 0, map, visualizeConfig);
+        mapView.setStartAndFinish(pfConfig.start, pfConfig.finish);
+        app.addToRoot(mapView, 30, 10);
+    }
+
+    public static void main(String[] args) throws IOException {
+        App app = new App(singleBorder);
+
+        Label label = new Label("Pathfinding-TUI", 0, 0);
+
+        ListView<Config> configListView = new ListView<>(0, 0, singleBorder);
         loadConfigs("./configs", configListView);
 
         Button createNew = new Button("Create new", 0, 0, () -> {
-            System.out.println("create new config (to be implemented)");
+            //todo: creating new pathfining config
         });
 
-        root.add(configListView, 3, 5);
-        root.add(createNew, 3, 3);
+        addMap(configListView, app);
 
-        createNew.down = configListView;
-        configListView.up = createNew;
+        app.addToRoot(label,app.getRootWidth()/2 - label.getText().length()/2, 1); 
+        app.addToRoot(configListView, 3, 5);
+        app.addToRoot(createNew, 3, 3);
 
-        root.setFocusedChild(createNew);
+        createNew.linkDown(configListView);
 
-        while (true) {
-            screen.clear();
-            TextGraphics tg = screen.newTextGraphics();
-            tg.putString(40, 1, "Path-finding-TUI");
-
-            root.draw(tg, true); 
-
-            screen.refresh();
-
-            KeyStroke key = screen.readInput();
-            if (key.getKeyType() == KeyType.Escape) break;
-
-            root.handleInput(key);
-        }
-
-        screen.stopScreen();
+        app.getRoot().setFocusedChild(createNew);
+        app.run();
     }
 
     private static void loadConfigs(String path, ListView listView) {
@@ -65,8 +56,14 @@ public class Main {
         for (File file : files) {
             String name = file.getName().replace(".properties", "");
             String fullPath = file.getPath();
-            listView.add(name, () -> {
-                System.out.println("Selected config: " + fullPath);
+            Config config;
+            try {
+                config = new Config(fullPath);
+            } catch (IOException e) {
+                continue;
+            }
+
+            listView.add(name, config, () -> {
                 //todo: config editor open
             });
         }

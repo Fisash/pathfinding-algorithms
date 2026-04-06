@@ -11,6 +11,9 @@ public class BorderDrawer {
     }
 
     public static void drawBorder(TextGraphics tg, int x, int y, int width, int height, BorderStyle style) {
+        if(style == null)
+            return;
+
         char topLeft, topRight, bottomLeft, bottomRight, horizontal, vertical;
 
         switch (style) {
@@ -38,9 +41,8 @@ public class BorderDrawer {
         tg.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
 
         tg.putString(x, y, String.valueOf(topLeft));
-        for (int i = 1; i <= width; i++) {
+        for (int i = 1; i <= width; i++)
             tg.putString(x + i, y, String.valueOf(horizontal));
-        }
         tg.putString(x + width + 1, y, String.valueOf(topRight));
 
         for (int i = 1; i <= height; i++) {
@@ -49,9 +51,8 @@ public class BorderDrawer {
         }
 
         tg.putString(x, y + height + 1, String.valueOf(bottomLeft));
-        for (int i = 1; i <= width; i++) {
+        for (int i = 1; i <= width; i++)
             tg.putString(x + i, y + height + 1, String.valueOf(horizontal));
-        }
         tg.putString(x + width + 1, y + height + 1, String.valueOf(bottomRight));
 
         tg.setForegroundColor(originalFg);

@@ -68,5 +68,10 @@ public abstract class TextRenderer extends Renderer {
         afterDraw();
     }
 
+    protected static int evaluateCellWidth(Map map) {
+        int maxDist = map.getWidth() * map.getHeight();
+        return String.valueOf(maxDist).length();
+    }
+
     protected void afterDraw() {}
 }

@@ -8,7 +8,9 @@ import com.googlecode.lanterna.TextColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListView extends Panel {
+public class ListView<T> extends Panel {
+   
+    private List<T> items = new ArrayList<>();
 
     private int selectedIndex = 0;
     private boolean isFixedSize;
@@ -24,10 +26,19 @@ public class ListView extends Panel {
         isFixedSize = false;
     }
 
-    public void add(String text, Runnable action) {
+    public T getSelectedItem() {
+        return items.get(selectedIndex);
+    }
+    
+    public T getItem(int index) {
+        return items.get(index);
+    }
+
+    public void add(String text, T item, Runnable action) {
         Button btn = new Button(text, x+2, y+1+children.size(), action);
         btn.setParent(this);
         children.add(btn);
+        items.add(item);
         if (children.size() == 1) {
             focusedChild = btn;
             if (parent != null)
@@ -41,7 +52,7 @@ public class ListView extends Panel {
         for (Component child : children) {
             Button item = (Button)child;
             if (focusedChild == child)
-                item.setDisplayText("[" + item.getOriginalLabel() + "]");
+                item.setDisplayText("->" + item.getOriginalLabel());
             else
                 item.resetDisplayText();
         }

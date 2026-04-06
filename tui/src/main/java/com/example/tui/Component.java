@@ -8,6 +8,17 @@ abstract class Component {
     protected Container parent;
     protected Component up, down, left, right;
 
+    private Runnable onFocusGainedCallback;
+    private Runnable onFocusLostCallback;
+
+    public void setFocusGainedCallback(Runnable action) {
+        this.onFocusGainedCallback = action;
+    }
+
+    public void setFocusLostCallback(Runnable action) {
+        this.onFocusLostCallback = action;
+    }
+
     public void setParent(Container parent) { 
         this.parent = parent;
     }
@@ -17,6 +28,26 @@ abstract class Component {
 
     public void setNeighbors(Component up, Component down, Component left, Component right) {
         this.up = up; this.down = down; this.left = left; this.right = right;
+    }
+
+    public void linkDown(Component neighbor) {
+        down = neighbor;
+        neighbor.up = this;
+    }
+
+    public void linkUp(Component neighbor) {
+        up = neighbor;
+        neighbor.down = this;
+    }
+
+    public void linkRight(Component neighbor) {
+        right = neighbor;
+        neighbor.left = this;
+    }
+
+    public void linkLeft(Component neighbor) {
+        left = neighbor;
+        neighbor.right = this;
     }
 
     protected int x, y;
@@ -53,9 +84,18 @@ abstract class Component {
     }
 
     protected void transferFocus(Component target) {
-        if (parent != null) {
+        if (parent != null)
             parent.setFocusedChild(target);
-        }
     }
+
+    protected void onFocusGained() {
+        if (onFocusGainedCallback != null)
+            onFocusGainedCallback.run();
+    }
+    protected void onFocusLost() {
+        if (onFocusLostCallback != null)
+            onFocusLostCallback.run();
+    }
+
     public abstract void draw(TextGraphics tg, boolean isFocused);
 }

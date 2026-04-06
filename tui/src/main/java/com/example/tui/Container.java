@@ -12,6 +12,14 @@ public abstract class Container extends Component {
     protected int width;
     protected int height;
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     protected Container(int x, int y, int width, int height) {
         super(x, y);
         this.width = width;
@@ -43,8 +51,12 @@ public abstract class Container extends Component {
     }
 
     public void setFocusedChild(Component child) {
-        if (child != null && child.getParent() == this)
+        if (child != null && child.getParent() == this) {
+            if(focusedChild != null && focusedChild != child)
+                focusedChild.onFocusLost();
             focusedChild = child;
+            focusedChild.onFocusGained();
+        }
     }
 
     public Component getFocusedChild() {
