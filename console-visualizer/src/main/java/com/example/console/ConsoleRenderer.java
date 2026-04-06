@@ -9,17 +9,12 @@ import com.example.text.TextRenderer;
 
 public class ConsoleRenderer extends TextRenderer {
 
-    private final ConsoleFrame frame;
     private final int msDisplayStateDelay;
-    private String cellSeparator = "";
-    private int cellWidth;
     private int cellWidthForAnimation;
-    private String widthFiller = " ";
 
-    public ConsoleRenderer(int msDisplayStateDelay, ConsoleFrame frame, Map map) {
-        super(map, new TextRenderConfig());
+    public ConsoleRenderer(int msDisplayStateDelay, ConsoleBorderDrawer borderDrawer, Map map) {
+        super(map, new TextRenderConfig(), borderDrawer);
         this.msDisplayStateDelay = msDisplayStateDelay;
-        this.frame = frame;
         this.cellWidthForAnimation = evaluateCellWidth(map);
         startAnimation();
     }
@@ -47,34 +42,10 @@ public class ConsoleRenderer extends TextRenderer {
             System.out.print(cellSeparator);
     }
 
-    private String padToWidth(String s) {
-        int len = s.length();
-        if (len < cellWidth) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < cellWidth - len; i++)
-                sb.append(widthFiller);
-            sb.append(s);
-            return sb.toString();
-        } else if (len > cellWidth)
-            return s.substring(len - cellWidth);
-        return s;
-    }
-
     @Override
-    public void draw() {
-        clear(); 
-        int separatorWidth = cellSeparator.length();
-        frame.drawTopLine(cols, cellWidth, separatorWidth);
-        for (int y = 0; y < rows; y++) {
-            System.out.print(frame.v);
-            for (int x = 0; x < cols; x++) {
-                TextCell cell = mapCell(buffer[y][x]);
-                drawCell(x, y, cell);
-            }
-            System.out.print(frame.v + "\n");
-        }
-        frame.drawBottomLine(cols, cellWidth, separatorWidth);
-        afterDraw();
+    protected void beforeDraw() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     @Override
@@ -85,10 +56,9 @@ public class ConsoleRenderer extends TextRenderer {
             Thread.currentThread().interrupt();
         }
     }
-
-    public static void clear() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    
+    @Override
+    protected void endRow() {
+        System.out.println();
     }
-
 }

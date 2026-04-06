@@ -1,7 +1,7 @@
 package com.example.text;
 
 public class TextRenderConfig {
-
+    
     public String wallSymbol;
     public RenderColor wallFg;
     public RenderColor wallBg;

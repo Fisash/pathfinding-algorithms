@@ -1,12 +1,11 @@
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/App.java
-/home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/BorderDrawer.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Button.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Component.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Container.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Label.java
+/home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/LanternaBorderDrawer.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/LanternaColorAdapter.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/LanternaRenderer.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/ListView.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Main.java
 /home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/MapView.java
-/home/fisash/Study/java/pathfinding-algorithms/tui/src/main/java/com/example/tui/Panel.java

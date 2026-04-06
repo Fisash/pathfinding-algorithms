@@ -1,4 +1,7 @@
-com/example/text/TextRenderer.class
 com/example/text/RenderColor.class
-com/example/text/TextCell.class
 com/example/text/TextRenderConfig.class
+com/example/text/TextRenderer.class
+com/example/text/BorderStyle$Template.class
+com/example/text/BorderDrawer.class
+com/example/text/BorderStyle.class
+com/example/text/TextCell.class

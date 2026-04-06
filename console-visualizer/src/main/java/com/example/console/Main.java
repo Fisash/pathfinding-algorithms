@@ -9,6 +9,7 @@ import com.example.Algorithm;
 import com.example.Point;
 import com.example.PathFindingResult;
 import com.example.Renderer;
+import com.example.text.BorderStyle;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -50,10 +51,9 @@ class Main{
             return;
         }
 
-        ConsoleFrame baseFrame = 
-        new ConsoleFrame('═', '║', '╔', '╗', '╚', '╝');
 
-        Renderer renderer = new ConsoleRenderer(config.rendererStateDelay, baseFrame, map);
+        ConsoleBorderDrawer borderDrawer = new ConsoleBorderDrawer(BorderStyle.SINGLE());
+        Renderer renderer = new ConsoleRenderer(config.rendererStateDelay, borderDrawer, map);
 
         createPF();
 

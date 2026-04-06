@@ -16,9 +16,13 @@ public class App {
     private Terminal terminal;
     private TerminalSize size;
     private Screen screen;
+    private TextGraphics textGraphics;
+    public TextGraphics getTextGraphics() {
+        return textGraphics;
+    }
     
-    private Panel root;
-    public Panel getRoot() {
+    private Container root;
+    public Container getRoot() {
         return root;
     }
 
@@ -35,31 +39,25 @@ public class App {
     }
     
     public App() throws IOException {
-        this(null);
-    }
-
-    public App(BorderDrawer.BorderStyle rootBorderStyle) throws IOException {
         terminal = new DefaultTerminalFactory().createTerminal();
         screen = new TerminalScreen(terminal);
         screen.startScreen();
         screen.setCursorPosition(null);
+        textGraphics = screen.newTextGraphics();
 
         size = screen.getTerminalSize();
         int rootWidth = size.getColumns() - 2;
         int rootHeight = size.getRows() - 2;
 
-        root = new Panel(0, 0, rootWidth, rootHeight, rootBorderStyle);
+        root = new Container(0, 0, rootWidth, rootHeight);
     }
 
     public void run() throws IOException {
         while (true) {
             screen.clear();
-            TextGraphics tg = screen.newTextGraphics();
 
-            root.draw(tg, true); 
-
+            root.draw(textGraphics, true); 
             screen.refresh();
-
             KeyStroke key = screen.readInput();
             if (key.getKeyType() == KeyType.Escape) break;
 

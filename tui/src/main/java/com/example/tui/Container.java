@@ -1,16 +1,22 @@
 package com.example.tui;
 
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.graphics.TextGraphics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Container extends Component {
+public class Container extends Component {
     protected List<Component> children = new ArrayList<>();
     protected Component focusedChild;
 
     protected int width;
     protected int height;
+
+    protected LanternaBorderDrawer borderDrawer;
+    public void setBorderDrawer(LanternaBorderDrawer value) {
+        borderDrawer = value;
+    }
 
     public int getWidth() {
         return width;
@@ -24,6 +30,13 @@ public abstract class Container extends Component {
         super(x, y);
         this.width = width;
         this.height = height;
+    }
+
+    protected Container(int x, int y, int width, int height, LanternaBorderDrawer borderDrawer) {
+        super(x, y);
+        this.width = width;
+        this.height = height;
+        this.borderDrawer = borderDrawer;
     }
 
     public void add(Component child, int x, int y) {
@@ -69,5 +82,12 @@ public abstract class Container extends Component {
             return true;
         return super.handleInput(key);
     }
-}
 
+    @Override
+    public void draw(TextGraphics tg, boolean isFocused) {
+        if (width > 0 && height > 0 && borderDrawer != null)
+            borderDrawer.drawBorder(x, y, width, height);
+        for (Component child : children)
+            child.draw(tg, isFocused && child == focusedChild);
+    }
+}

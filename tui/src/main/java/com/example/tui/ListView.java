@@ -8,7 +8,7 @@ import com.googlecode.lanterna.TextColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListView<T> extends Panel {
+public class ListView<T> extends Container {
    
     private List<T> items = new ArrayList<>();
 
@@ -16,13 +16,13 @@ public class ListView<T> extends Panel {
     private boolean isFixedSize;
 
     public ListView (int x, int y, int width, int height, 
-        BorderDrawer.BorderStyle borderStyle) {
-        super(x, y, width, height, borderStyle);
+        LanternaBorderDrawer borderDrawer) {
+        super(x, y, width, height, borderDrawer);
         isFixedSize = true;
     }
 
-    public ListView(int x, int y, BorderDrawer.BorderStyle borderStyle) {
-        super(x, y, 0, 0, borderStyle);
+    public ListView(int x, int y, LanternaBorderDrawer borderDrawer) {
+        super(x, y, 0, 0, borderDrawer);
         isFixedSize = false;
     }
 

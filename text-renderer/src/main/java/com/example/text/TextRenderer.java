@@ -7,10 +7,21 @@ import com.example.Renderer;
 public abstract class TextRenderer extends Renderer {
 
     protected TextRenderConfig config;
+    protected BorderDrawer borderDrawer;
 
-    protected TextRenderer(Map map, TextRenderConfig config) {
+    protected int cellWidth;
+    public int getCellWidth() {
+        return cellWidth;
+    }
+
+    protected String cellSeparator = "";
+    protected String widthFiller = " ";
+
+    protected TextRenderer(Map map, TextRenderConfig config, BorderDrawer borderDrawer) {
         super(map);
         this.config = config;
+        this.borderDrawer = borderDrawer;
+        this.cellWidth = evaluateCellWidth(map);
     }
 
     protected TextCell mapCell(RenderCell cell) {
@@ -59,19 +70,46 @@ public abstract class TextRenderer extends Renderer {
 
     @Override
     public void draw() {
-        for (int y = 0; y < getBufferRows(); y++) {
-            for (int x = 0; x < getBufferCols(); x++) {
+        beforeDraw();
+        if(borderDrawer != null)
+            borderDrawer.drawTopLine(cols, cellWidth, cellSeparator.length());
+
+        for (int y = 0; y < rows; y++) {
+            if(borderDrawer != null)
+                borderDrawer.drawVertical();
+            for (int x = 0; x < cols; x++) {
                 TextCell cell = mapCell(buffer[y][x]);
                 drawCell(x, y, cell);
             }
+            if(borderDrawer != null)
+                borderDrawer.drawVertical();
+            endRow();
         }
+        if(borderDrawer != null)
+            borderDrawer.drawBottomLine(cols, cellWidth, cellSeparator.length());
         afterDraw();
     }
+
+    protected abstract void endRow();
+
+    protected void afterDraw() {}
+    protected void beforeDraw() {}
 
     protected static int evaluateCellWidth(Map map) {
         int maxDist = map.getWidth() * map.getHeight();
         return String.valueOf(maxDist).length();
     }
 
-    protected void afterDraw() {}
+    protected String padToWidth(String s) {
+        int len = s.length();
+        if (len < cellWidth) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < cellWidth - len; i++)
+                sb.append(widthFiller);
+            sb.append(s);
+            return sb.toString();
+        } else if (len > cellWidth)
+            return s.substring(len - cellWidth);
+        return s;
+    }
 }
