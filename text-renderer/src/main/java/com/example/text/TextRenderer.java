@@ -21,7 +21,7 @@ public abstract class TextRenderer extends Renderer {
         super(map);
         this.config = config;
         this.borderDrawer = borderDrawer;
-        this.cellWidth = evaluateCellWidth(map);
+        this.cellWidth = 1;
     }
 
     protected TextCell mapCell(RenderCell cell) {

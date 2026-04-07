@@ -17,7 +17,11 @@ public class LanternaRenderer extends TextRenderer {
     
     public LanternaRenderer(Map map, TextGraphics tg, TextRenderConfig config) {
         super(map, config, new LanternaBorderDrawer(new BorderStyle(), tg));
+        cellWidth = 2;
     }
+
+    private int cellOffsetX = 1;
+    private int cellOffsetY = 1;
 
     @Override
     protected void drawCell(int x, int y, TextCell cell) {
@@ -26,19 +30,19 @@ public class LanternaRenderer extends TextRenderer {
         tg.setForegroundColor(LanternaColorAdapter.toLanterna(cell.fg));
         tg.setBackgroundColor(LanternaColorAdapter.toLanterna(cell.bg));
         String content = padToWidth(cell.text);
-        tg.putString(x * cellWidth, y, content);
+        tg.putString(x * cellWidth + cellOffsetX, y+cellOffsetY, content);
     }
     @Override
     public void draw() {
+        LanternaBorderDrawer bd = (LanternaBorderDrawer) borderDrawer;
+        bd.drawBorder(0, 0, cols * cellWidth, rows); 
+
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
                 TextCell cell = mapCell(buffer[y][x]);
                 drawCell(x, y, cell);
             }
         }
-
-        LanternaBorderDrawer bd = (LanternaBorderDrawer) borderDrawer;
-        bd.drawBorder(0, 0, cols * cellWidth, rows); 
     }
 
     @Override
