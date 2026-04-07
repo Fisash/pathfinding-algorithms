@@ -1,0 +1,11 @@
+*.jar
+
+target/
+
+dependency-reduced-pom.xml
+pom.xml.*
+release.properties
+
+*.class
+
+*.log
