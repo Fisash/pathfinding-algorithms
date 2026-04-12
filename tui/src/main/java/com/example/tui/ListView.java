@@ -34,18 +34,23 @@ public class ListView<T> extends Container {
         return items.get(index);
     }
 
-    public void add(String text, T item, Runnable action) {
-        Button btn = new Button(text, x+2, y+1+children.size(), action);
-        btn.setParent(this);
-        children.add(btn);
+    public void add(Button button, T item) {
+        button.setParent(this);
+        button.setPosition(x+2, y+1+children.size());
+        children.add(button);
         items.add(item);
         if (children.size() == 1) {
-            focusedChild = btn;
+            focusedChild = button;
             if (parent != null)
                 parent.setFocusedChild(this);
         }
         updateSelectionDisplay();
         if(!isFixedSize) updateSize();
+    }
+
+    public void add(String text, T item, Runnable action) {
+        Button btn = new Button(text, x+2, y+1+children.size(), action);
+        add(btn, item);
     }
 
     private void updateSelectionDisplay() {

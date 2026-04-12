@@ -16,11 +16,28 @@ public class MapView extends Component {
     private int width;
     private int height;
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
     public void setStartAndFinish(Point start, Point finish) {
         ArrayList<Point> list = new ArrayList<>();
         list.add(start);
         list.add(finish);
         renderer.fillPath(list);    
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+        renderer.fillMap(map);
+        this.width = map.getWidth() * renderer.getCellWidth();
+        this.height = map.getHeight();
     }
 
     public MapView(int x, int y, Map map, TextRenderConfig config, TextGraphics tg) {

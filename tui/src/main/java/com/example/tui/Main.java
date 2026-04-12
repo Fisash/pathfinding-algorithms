@@ -13,6 +13,7 @@ import java.io.IOException;
 public class Main {
 
     private static LanternaBorderDrawer borderDrawer;
+    private static MapView mapView;
 
     private static void addMap(ListView<Config> list, App app, TextGraphics tg) {
         Config pfConfig = list.getItem(0);
@@ -20,7 +21,7 @@ public class Main {
         Map map = pfConfig.map;
         TextRenderConfig visualizeConfig = new TextRenderConfig();
 
-        MapView mapView = new MapView(0, 0, map, visualizeConfig, tg);
+        mapView = new MapView(0, 0, map, visualizeConfig, tg);
         mapView.setStartAndFinish(pfConfig.start, pfConfig.finish);
         app.addToRoot(mapView, 30, 10);
     }
@@ -30,18 +31,20 @@ public class Main {
         TextGraphics tg = app.getTextGraphics();
         borderDrawer = new LanternaBorderDrawer(BorderStyle.SINGLE(), tg);
 
-        Label label = new Label("Pathfinding-TUI", 0, 0);
 
         ListView<Config> configListView = new ListView<>(0, 0, borderDrawer);
         loadConfigs("./configs", configListView);
+
+        addMap(configListView, app, tg);
 
         Button createNew = new Button("Create new", 0, 0, () -> {
             //todo: creating new pathfining config
         });
 
-        addMap(configListView, app, tg);
+        Label title = new Label("Pathfinding-TUI", 0, 0);
+        LayoutHelper.centerHorizontally(title, app.getRoot());
+        app.addToRoot(title, title.getX(), 1); 
 
-        app.addToRoot(label,app.getRootWidth()/2 - label.getText().length()/2, 1); 
         app.addToRoot(configListView, 3, 5);
         app.addToRoot(createNew, 3, 3);
 
@@ -68,9 +71,18 @@ public class Main {
                 continue;
             }
 
-            listView.add(name, config, () -> {
-                //todo: config editor open
-            });
+            listView.add(createConfigButton(name, config), config);
         }
+    }
+
+    private static Button createConfigButton(String label, Config config) {
+        Runnable onClick = () -> {};
+        Runnable onFocusGain = () -> {
+            mapView.setMap(config.map);
+            mapView.setStartAndFinish(config.start, config.finish);
+        };
+        Button result = new Button(label, 0, 0, onClick);
+        result.setFocusGainedCallback(onFocusGain);
+        return result;
     }
 }

@@ -42,6 +42,16 @@ public class Button extends Component {
     }
 
     @Override
+    public int getWidth() {
+        return label.length();
+    }
+    
+    @Override
+    public int getHeight() {
+        return 1;
+    }
+
+    @Override
     public void draw(TextGraphics tg, boolean isFocused) {
         if (isFocused) {
             tg.setBackgroundColor(TextColor.ANSI.WHITE);

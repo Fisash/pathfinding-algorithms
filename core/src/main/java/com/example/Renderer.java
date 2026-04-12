@@ -29,8 +29,12 @@ public abstract class Renderer {
     }
 
     protected Renderer(Map map) {
-        initBuffer(map.getHeight(), map.getWidth());
+        initBuffer(map);
         fillMap(map);
+    }
+
+    protected void initBuffer(Map map) {
+        initBuffer(map.getHeight(), map.getWidth());
     }
 
     protected void initBuffer(int rows, int cols) {
@@ -132,6 +136,9 @@ public abstract class Renderer {
     }
     //fill isWall in buffer
     public void fillMap(Map map) {
+        if(map.getHeight() != rows || map.getWidth() != cols) 
+            initBuffer(map);
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++)
                buffer[i][j].isWall = map.isWall(j, i);

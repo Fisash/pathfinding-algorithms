@@ -51,9 +51,22 @@ abstract class Component {
     }
 
     protected int x, y;
-    protected Component (int x, int y) {
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+
+    protected Component (int x, int y) {
+        setPosition(x, y);
     }
 
     public boolean handleInput(KeyStroke key) {
@@ -97,5 +110,7 @@ abstract class Component {
             onFocusLostCallback.run();
     }
 
+    public abstract int getWidth();
+    public abstract int getHeight();
     public abstract void draw(TextGraphics tg, boolean isFocused);
 }

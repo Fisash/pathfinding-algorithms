@@ -18,10 +18,12 @@ public class Container extends Component {
         borderDrawer = value;
     }
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return height;
     }
